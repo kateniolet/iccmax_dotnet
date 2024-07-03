@@ -1,4 +1,4 @@
-Unofficial port of the ICC 2:2003 standard to C#
+Unofficial port of the ICC 2:2003 reference implementation to C#
 See https://github.com/InternationalColorConsortium/DemoIccMAX
 
 This project aims to be a straight-as-possible port of the original C++ code C#
