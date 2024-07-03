@@ -363,7 +363,7 @@ namespace RefIccMax.IccProfLib
         icSigXYZType = 0x58595A20,  /* 'XYZ ' */
         icSigXYZArrayType = 0x58595A20,  /* 'XYZ ' */
         icSigZipUtf8TextType = 0x7a757438,  /* 'zut8' */
-#if defined(XRITE_ADDITIONS)
+#if XRITE_ADDITIONS
     icSigZipXmlType_XRITE               = 0x5a584d4c,  /* 'ZXML' - X-Rite's uppercase version of 'zxml' */
 #endif
         icSigZipXmlType = 0x7a786d6c,  /* 'zxml' */
@@ -657,7 +657,67 @@ public enum icTintZeroMemberSignature : uint
         icSigMCSData = 0x6d630000,  /* "mc0000" */
         /*Note: "nc0001" through "ncFFFF" are also valid signatures defined using macro icNColorSpaceSig()*/
     }
-    
+
+    /** profileClass enumerations */
+    public enum icProfileClassSignature : uint{
+        icSigInputClass = 0x73636E72,  /* 'scnr' */
+        icSigDisplayClass = 0x6D6E7472,  /* 'mntr' */
+        icSigOutputClass = 0x70727472,  /* 'prtr' */
+        icSigLinkClass = 0x6C696E6B,  /* 'link' */
+        icSigAbstractClass = 0x61627374,  /* 'abst' */
+        icSigColorSpaceClass = 0x73706163,  /* 'spac' */
+        icSigNamedColorClass = 0x6e6d636c,  /* 'nmcl' */
+        icSigColorEncodingClass = 0x63656e63,  /* 'cenc' */
+        icSigMaterialIdentificationClass = 0x6D696420,  /* 'mid ' */
+        icSigMaterialLinkClass = 0x6d6c6e6b,  /* 'mlnk' */
+        icSigMaterialVisualizationClass = 0x6d766973,  /* 'mvis' */
+    }
+
+    /** Platform Signatures */
+   public enum icPlatformSignature
+     : uint {
+        icSigMacintosh = 0x4150504C,  /* 'APPL' */
+        icSigMicrosoft = 0x4D534654,  /* 'MSFT' */
+        icSigSolaris = 0x53554E57,  /* 'SUNW' */
+        icSigSGI = 0x53474920,  /* 'SGI ' */
+        icSigTaligent = 0x54474E54,  /* 'TGNT' */
+        icSigUnkownPlatform = 0x00000000
+    }
+
+    /** CMM signatures from the signature registry (as of Mar 6, 2018) */
+    public enum icCmmSignature
+    : uint {
+        icSigAdobe = 0x41444245,  /* 'ADBE' */
+        icSigAgfa = 0x41434D53,  /* 'ACMS' */
+        icSigApple = 0x6170706C,  /* 'appl' */
+        icSigColorGear = 0x43434D53,  /* 'CCMS' */
+        icSigColorGearLite = 0x5543434D,  /* 'UCCM' */
+        icSigColorGearC = 0x55434D53,  /* 'UCMS' */
+        icSigEFI = 0x45464920,  /* 'EFI ' */
+        icSigExactScan = 0x45584143,  /* 'EXAC' */
+        icSigFujiFilm = 0x46462020,  /* 'FF  ' */
+        icSigHarlequinRIP = 0x48434d4d,  /* 'HCMM' */
+        icSigArgyllCMS = 0x6172676C,  /* 'argl' */
+        icSigLogoSync = 0x44676f53,  /* 'LgoS' */
+        icSigHeidelberg = 0x48444d20,  /* 'HDM ' */
+        icSigLittleCMS = 0x6C636D73,  /* 'lcms' */
+        icSigKodak = 0x4b434d53,  /* 'KCMS' */
+        icSigKonicaMinolta = 0x4d434d44,  /* 'MCML' */
+        icSigWindowsCMS = 0x57435320,  /* 'WCS ' */
+        icSigMutoh = 0x5349474E,  /* 'SIGN' */
+        icSigOnyxGraphics = 0x4f4e5958,  /* 'ONYX' */
+        icSigRefIccMAX = 0x52494343,  /* 'RIMX' */
+        icSigDemoIccMAX = 0x44494d58,  /* 'DIMX' */
+        icSigRolfGierling = 0x52474d53,  /* 'RGMS' */
+        icSigSampleICC = 0x53494343,  /* 'SICC' */
+        icSigToshiba = 0x54434D4D,  /* 'TCMM' */
+        icSigTheImagingFactory = 0x33324254,  /* '32BT' */
+        icSigVivo = 0x7669766F,  /* 'VIVO' */
+        icSigWareToGo = 0x57544720,  /* 'WTG ' */
+        icSigZoran = 0x7a633030,  /* 'zc00' */
+        icSigUnknownCmm = 0x00000000,
+    }
+   
 
     public static class Global
     {
@@ -697,6 +757,18 @@ public enum icTintZeroMemberSignature : uint
         public static icColorSpaceSignature icNColorSpaceSig(icUInt32Number type, icUInt32Number n) { return ((icColorSpaceSignature)(icGetColorSpaceType(type) + icNumColorSpaceChannels(n))); }
         public static icSpectralColorSignature icSpectralColorSpaceSig(icUInt32Number type, icUInt32Number n) { return ((icSpectralColorSignature)(icGetColorSpaceType(type) + icNumColorSpaceChannels(n))); }
 
+        public const icColorSpaceSignature icSigLabPcsData = icColorSpaceSignature.icSigLabData;
+        public const icColorSpaceSignature icSigXYZPcsData = icColorSpaceSignature.icSigXYZData;
+        public const icColorSpaceSignature icSigReflectanceSpectralPcsData = ((icColorSpaceSignature)icSpectralColorSignature.icSigReflectanceSpectralData);
+        public const icColorSpaceSignature icSigTransmissionSpectralPcsData = ((icColorSpaceSignature)icSpectralColorSignature.icSigTransmisionSpectralData);
+        public const icColorSpaceSignature icSigRadiantSpectralPcsData = ((icColorSpaceSignature)icSpectralColorSignature.icSigRadiantSpectralData);
+        public const icColorSpaceSignature icSigBiDirReflectanceSpectralPcsData = ((icColorSpaceSignature)icSpectralColorSignature.icSigBiSpectralReflectanceData);
+        public const icColorSpaceSignature icSigSparseMatrixSpectralPcsData = ((icColorSpaceSignature)icSpectralColorSignature.icSigSparseMatrixReflectanceData);
+
+        /* Default luminance (cd/m^2) for converting between Luminance based and Normalized colorimetry */
+        public const uint icDefaultLuminance = 160;
+
+        //TODO can these be moved to their respective enums?
         /** Convenience Enum Definitions - Not defined in ICC specification*/
         public const icTagSignature icSigUnknownTag = ((icTagSignature)0x3f3f3f3f);  /* '????' */
         public const icTagSignature icMaxEnumTag = ((icTagSignature)0xFFFFFFFF);
@@ -728,5 +800,8 @@ public enum icTintZeroMemberSignature : uint
         public const icColorSpaceSignature icSigBRDFDirect = ((icColorSpaceSignature)0x62640000);  /* "bd0000" */
         public const icColorSpaceSignature icColorSpaceSignatureicSigUnknownData = ((icColorSpaceSignature)0x3f3f3f3f);  /* '????' */
         public const icColorSpaceSignature icMaxEnumData = ((icColorSpaceSignature)0xFFFFFFFF);
+        public const icProfileClassSignature icMaxEnumClass = ((icProfileClassSignature)0xFFFFFFFF);
+        public const icPlatformSignature icMaxEnumPlatform = ((icPlatformSignature)0xFFFFFFFF);
+        public const icCmmSignature icMaxEnumCmm = ((icCmmSignature)0xFFFFFFFF);
     }
 }
