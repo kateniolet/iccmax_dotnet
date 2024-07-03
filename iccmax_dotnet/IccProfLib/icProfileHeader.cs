@@ -377,7 +377,8 @@ namespace RefIccMax.IccProfLib
     /**
  * Tag Structure type signatures
  */
- public enum icStructSignature : uint {
+    public enum icStructSignature : uint
+    {
         icSigBRDFStruct = 0x62726466,  /* 'brdf' */
         icSigColorantInfoStruct = 0x63696e66,  /* 'cinf' */
         icSigColorEncodingParamsSruct = 0x63657074,  /* 'cept' */
@@ -387,7 +388,96 @@ namespace RefIccMax.IccProfLib
         icSigTintZeroStruct = 0x746e7430,  /* 'tnt0' */
         icSigUndefinedStruct = 0x00000000,
     }
-    
+
+    /**
+ * Tag Array type signatures
+ */
+    public enum icArraySignature : uint
+    {
+        icSigUndefinedArray = 0x00000000,
+        icSigNamedColorArray = 0x6e6d636c,  /* 'nmcl' */
+        icSigColorantInfoArray = 0x63696e66,  /* 'cinf' */
+        icSigUtf8TextTypeArray = 0x75746638,  /* 'utf8' */
+    }
+
+    /************************************************************************
+ * CMM environment variable signatures
+ ************************************************************************/
+    public enum icSigCmmEnvVar : uint
+    {
+        //Floating point constant operation
+        icSigTrueVar = 0x74727565,  /* 'true' */
+        icSigNotDefVar = 0x6e646566,  /* 'ndef' */
+    }
+
+    /**
+ * Multi-Processing Element type signatures
+ */
+    public enum icElemTypeSignature : uint
+    {
+        //DMP Proposal 1.0 elements
+        icSigCurveSetElemType = 0x63767374,  /* 'cvst' */
+        icSigMatrixElemType = 0x6D617466,  /* 'matf' */
+        icSigCLutElemType = 0x636C7574,  /* 'clut' */
+        icSigBAcsElemType = 0x62414353,  /* 'bACS' */
+        icSigEAcsElemType = 0x65414353,  /* 'eACS' */
+        // V5 elements
+        icSigCalculatorElemType = 0x63616c63,  /* 'calc' */
+        icSigExtCLutElemType = 0x78636c74,  /* 'xclt' */
+        icSigXYZToJabElemType = 0x58746f4a,  /* 'XtoJ' */
+        icSigJabToXYZElemType = 0x4a746f58,  /* 'JtoX' */
+        icSigSparseMatrixElemType = 0x736d6574,  /* 'smet' */
+        icSigTintArrayElemType = 0x74696e74,  /* 'tint' */
+
+        // V5.1 elements
+        icSigToneMapElemType = 0x746d6170,  /* 'tmap' */
+
+        // V5 spectral elements
+        icSigEmissionMatrixElemType = 0x656d7478,  /* 'emtx' */
+        icSigInvEmissionMatrixElemType = 0x69656d78,  /* 'iemx' */
+        icSigEmissionCLUTElemType = 0x65636c74,  /* 'eclt' */
+        icSigReflectanceCLUTElemType = 0x72636c74,  /* 'rclt' */
+        icSigEmissionObserverElemType = 0x656f6273,  /* 'eobs' */
+        icSigReflectanceObserverElemType = 0x726f6273,  /* 'robs' */
+    }
+
+    /**
+* BRDFStructure (icSigBrdfStruct) Member Tag signatures
+*/
+    public enum icBrdfMemberSignature
+        : uint
+    {
+        icSigBrdfTypeMbr = 0x74797065,  /* 'type' */
+        icSigBrdfFunctionMbr = 0x66756e63,  /* 'func' */
+        icSigBrdfParamsPerChannelMbr = 0x6e756d70,  /* 'nump' */
+        icSigBrdfTransformMbr = 0x7866726d,  /* 'xfrm' */
+        icSigBrdfLightTransformMbr = 0x6c747866,  /* 'ltxf' */
+        icSigBrdfOutputTransformMbr = 0x6f757478,  /* 'outx' */ /* Note: converts the output of the BRDF model to PCS */
+    }
+
+    /**
+ * BRDF function signatures
+ */
+    public enum icSigBRDFFunction
+       : uint
+    {
+        icSigBRDFFunctionMonochrome = 0x6d6f6e6f,   /* 'mono' */
+        icSigBRDFFunctionColor = 0x636f6c72    /* 'colr' */
+    }
+
+
+    /**
+* ColorantInfoStructure (icSigColorantInfoStruct) Member Tag signatures
+*/
+    public enum icColorantInfoMemberSignature
+       : uint
+    {
+        icSigCinfNameMbr = 0x6e616d65, /* 'name' */
+        icSigCinfLocalizedNameMbr = 0x6c636e6d, /* 'lcnm' */
+        icSigCinfPcsDataMbr = 0x70637320, /* 'pcs ' */
+        icSigCinfSpectralDataMbr = 0x73706563, /* 'spec' */
+    }
+
 
     public static class Global
     {
@@ -429,5 +519,13 @@ namespace RefIccMax.IccProfLib
         public const icTagTypeSignature icMaxEnumType = ((icTagTypeSignature)0xFFFFFFFF);
         public const icStructSignature icSigUnknownStruct = ((icStructSignature)0x3f3f3f3f);  /* '????' */
         public const icStructSignature icMaxEnumStruct = ((icStructSignature)0xFFFFFFFF);
+        public const icArraySignature icSigUnknownArray = ((icArraySignature)0x3f3f3f3f);  /* '????' */
+        public const icArraySignature icMaxEnumArray = ((icArraySignature)0xFFFFFFFF);
+        public const icElemTypeSignature icSigUnknownElemType = ((icElemTypeSignature)0x3f3f3f3f);  /* '????' */
+        public const icElemTypeSignature icMaxEnumElemType = ((icElemTypeSignature)0xFFFFFFFF);
+        public const icBrdfMemberSignature icSigUnknownBrdfMember = ((icBrdfMemberSignature)0x3f3f3f3f);  /* '????' */
+        public const icBrdfMemberSignature icMaxBrdfMember = ((icBrdfMemberSignature)0xFFFFFFFF);
+        public const icColorantInfoMemberSignature icSigCinfUnknownMbr=  ((icColorantInfoMemberSignature)0x3f3f3f3f);  /* '????' */
+        public const icColorantInfoMemberSignature icMaxCinfMbr = ((icColorantInfoMemberSignature)0xFFFFFFFF);
     }
 }
