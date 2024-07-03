@@ -478,6 +478,186 @@ namespace RefIccMax.IccProfLib
         icSigCinfSpectralDataMbr = 0x73706563, /* 'spec' */
     }
 
+    /**
+* ColorEncodingParamsStructure (icSigColorEncodingParamsStruct) Member Tag signatures
+*/
+public enum icColorEncodingParamsMemberSignature
+     : uint {
+        icSigCeptBluePrimaryXYZMbr = 0x6258595a,  /* bXYZ' */
+        icSigCeptGreenPrimaryXYZMbr = 0x6758595a,  /* gXYZ' */
+        icSigCeptRedPrimaryXYZMbr = 0x7258595a,  /* rXYZ' */
+        icSigCeptTransferFunctionMbr = 0x66756e63, /* func */
+        icSigCeptInverseTransferFunctionMbr = 0x69666e63, /* ifnc */
+        icSigCeptLumaChromaMatrixMbr = 0x6c6d6174,  /* lmat' */
+        icSigCeptWhitePointLuminanceMbr = 0x776c756d,  /* wlum' */
+        icSigCeptWhitePointChromaticityMbr = 0x7758595a,  /* wXYZ' */
+        icSigCeptEncodingRangeMbr = 0x65526e67,  /* eRng' */
+        icSigCeptBitDepthMbr = 0x62697473,  /* bits' */
+        icSigCeptImageStateMbr = 0x696d7374,  /* imst' */
+        icSigCeptImageBackgroundMbr = 0x69626b67,  /* ibkg' */
+        icSigCeptViewingSurroundMbr = 0x73726e64,  /* srnd' */
+        icSigCeptAmbientIlluminanceMbr = 0x61696c6d,  /* ailm' */
+        icSigCeptAmbientWhitePointLuminanceMbr = 0x61776c6d,  /* awlm' */
+        icSigCeptAmbientWhitePointChromaticityMbr = 0x61777063,  /* awpc' */
+        icSigCeptViewingFlareMbr = 0x666c6172,  /* 'flar' */
+        icSigCeptValidRelativeLuminanceRangeMbr = 0x6c726e67,  /* lrng' */
+        icSigCeptMediumWhitePointLuminanceMbr = 0x6d77706c,  /* mwpl' */
+        icSigCeptMediumWhitePointChromaticityMbr = 0x6d777063,  /* mwpc' */
+        icSigCeptMediumBlackPointLuminanceMbr = 0x6d62706c,  /* mbpl' */
+        icSigCeptMediumBlackPointChromaticityMbr = 0x6d627063,  /* mbpc' */
+    }
+
+    /**
+* MeasurementInfoStructure (icSigMeasurementInfoStruct) Member Tag signatures
+*/
+ public enum icMeasurementInfoMemberSignature
+    : uint {
+        icSigMeasBackingMbr = 0x6d62616b, /* 'mbak' */
+        icSigMeasFlareMbr = 0x6d666c72, /* 'mflr' */
+        icSigMeasGeometryMbr = 0x6d67656f, /* 'mgeo' */
+        icSigMeasIlluminantMbr = 0x6d696c6c, /* 'mill' */
+        icSigMeasIlluminantRangeMbr = 0x6d697772, /* 'miwr' */
+        icSigMeasModeMbr = 0x6d6d6f64, /* 'mmod' */
+    }
+
+    /**
+* NamedColorStructure (icSigNamedColorStruct) Member Tag signatures
+*/
+ public enum icNamedColorlMemberSignature
+     : uint {
+        icSigNmclBrdfColorimetricMbr = 0x62636f6c,  /* 'bcol' */
+        icSigNmclBrdfColorimetricParamsMbr = 0x62637072,  /* 'bcpr' */
+        icSigNmclBrdfSpectralMbr = 0x62737063,  /* 'bspc' */
+        icSigNmclBrdfSpectralParamsMbr = 0x62737072,  /* 'bspr' */
+        icSigNmclDeviceDataMbr = 0x64657620,  /* 'dev ' */
+        icSigNmclLocalizedNameMbr = 0x6c636e6d,  /* 'lcnm' */
+        icSigNmclNameMbr = 0x6e616d65,  /* 'name' */
+        icSigNmclNormalMapMbr = 0x6e6d6170,  /* 'nmap' */
+        icSigNmclPcsDataMbr = 0x70637320,  /* 'pcs ' */
+        icSigNmclSpectralDataMbr = 0x73706563,  /* 'spec' */
+        icSigNmclSpectralOverBlackMbr = 0x73706362,  /* 'spcb' */
+        icSigNmclSpectralOverGrayMbr = 0x73706367,  /* 'spcg' */
+        icSigNmclTintMbr = 0x74696e74,  /* 'tint' */
+    }
+
+    /**
+* ProfileInfoStructure (icSigProfileInfoStruct) Member Tag signatures
+*/
+ public enum icProfileInfoMemberSignature
+    : uint {
+        icSigPinfAttributesMbr = 0x61747472, /* 'attr' */
+        icSigPinfProfileDescMbr = 0x70647363, /* 'pdsc' */
+        icSigPinfProfileIDMbr = 0x70696420, /* 'pid ' */
+        icSigPinfManufacturerDescMbr = 0x646d6e64, /* 'dmnd' */
+        icSigPinfManufacturerSigMbr = 0x646d6e73, /* 'dmns' */
+        icSigPinfModelDescMbr = 0x646d6464, /* 'dmdd' */
+        icSigPinfModelSigMbr = 0x6d6f6420, /* 'mod ' */
+        icSigPinfRenderTransformMbr = 0x7274726e, /* 'rtrn' */
+        icSigPinfTechnologyMbr = 0x74656368, /* 'tech' */
+    }
+
+    /**
+* TintZeroStructure (icSigTintZeroStruct) Member Tag signatures
+*/
+public enum icTintZeroMemberSignature : uint
+     {
+        icSigTnt0DeviceDataMbr = 0x64657620,  /* 'dev ' */
+        icSigTnt0PcsDataMbr = 0x70637320,  /* 'pcs ' */
+        icSigTnt0SpectralDataMbr = 0x73706563,  /* 'spec' */
+        icSigTnt0SpectralOverBlackMbr = 0x73706362,  /* 'spcb' */
+        icSigTnt0SpectralOverGrayMbr = 0x73706367,  /* 'spcg' */
+    }
+
+    /** 
+ * Color Space Signatures.
+ * Note that only icSigXYZData and icSigLabData are valid
+ * Profile Connection Spaces (PCSs)
+ */
+ public enum icColorSpaceSignature
+    : uint {
+        icSigNoColorData = 0x00000000,
+
+        icSigXYZData = 0x58595A20,  /* 'XYZ ' */
+        icSigLabData = 0x4C616220,  /* 'Lab ' */
+        icSigLuvData = 0x4C757620,  /* 'Luv ' */
+        icSigYCbCrData = 0x59436272,  /* 'YCbr' */
+        icSigYxyData = 0x59787920,  /* 'Yxy ' */
+        icSigRgbData = 0x52474220,  /* 'RGB ' */
+        icSigGrayData = 0x47524159,  /* 'GRAY' */
+        icSigHsvData = 0x48535620,  /* 'HSV ' */
+        icSigHlsData = 0x484C5320,  /* 'HLS ' */
+        icSigCmykData = 0x434D594B,  /* 'CMYK' */
+        icSigCmyData = 0x434D5920,  /* 'CMY ' */
+
+        icSig1colorData = 0x31434C52,  /* '1CLR' */
+        icSig2colorData = 0x32434C52,  /* '2CLR' */
+        icSig3colorData = 0x33434C52,  /* '3CLR' */
+        icSig4colorData = 0x34434C52,  /* '4CLR' */
+        icSig5colorData = 0x35434C52,  /* '5CLR' */
+        icSig6colorData = 0x36434C52,  /* '6CLR' */
+        icSig7colorData = 0x37434C52,  /* '7CLR' */
+        icSig8colorData = 0x38434C52,  /* '8CLR' */
+        icSig9colorData = 0x39434C52,  /* '9CLR' */
+        icSig10colorData = 0x41434C52,  /* 'ACLR' */
+        icSig11colorData = 0x42434C52,  /* 'BCLR' */
+        icSig12colorData = 0x43434C52,  /* 'CCLR' */
+        icSig13colorData = 0x44434C52,  /* 'DCLR' */
+        icSig14colorData = 0x45434C52,  /* 'ECLR' */
+        icSig15colorData = 0x46434C52,  /* 'FCLR' */
+        icSigNamedData = 0x6e6d636c,  /* 'nmcl' */
+
+        icSigMCH1Data = 0x31434C52,  /* '1CLR' */
+        icSigMCH2Data = 0x32434C52,  /* '2CLR' */
+        icSigMCH3Data = 0x33434C52,  /* '3CLR' */
+        icSigMCH4Data = 0x34434C52,  /* '4CLR' */
+        icSigMCH5Data = 0x35434C52,  /* '5CLR' */
+        icSigMCH6Data = 0x36434C52,  /* '6CLR' */
+        icSigMCH7Data = 0x37434C52,  /* '7CLR' */
+        icSigMCH8Data = 0x38434C52,  /* '8CLR' */
+        icSigMCH9Data = 0x39434C52,  /* '9CLR' */
+        icSigMCHAData = 0x41434C52,  /* 'ACLR' */
+        icSigMCHBData = 0x42434C52,  /* 'BCLR' */
+        icSigMCHCData = 0x43434C52,  /* 'CCLR' */
+        icSigMCHDData = 0x44434C52,  /* 'DCLR' */
+        icSigMCHEData = 0x45434C52,  /* 'ECLR' */
+        icSigMCHFData = 0x46434C52,  /* 'FCLR' */
+
+        icSigNChannelData = 0x6e630000,  /* "nc0000" */
+        /*Note: "nc0001" through "ncFFFF" are also valid signatures defined using macro icNColorSpaceSig()*/
+
+        icSigSrcMCSChannelData = 0x6d630000,  /* "mc0000" */
+        /*Note: "mc0001" through "mcFFFF" are also valid signatures defined using macro icNColorSpaceSig()*/
+
+    }
+
+    /** icSpectralColorSignature enumerations */
+   public enum icSpectralColorSignature
+     : uint {
+        icSigNoSpectralData = 0x00000000,
+        icSigReflectanceSpectralData = 0x72730000, /* "rs0000" */
+        /*Note: "rs0001" through "rsFFFF" are also valid signatures defined using macro icSpectralColorSpaceSig()*/
+
+        icSigTransmisionSpectralData = 0x74730000, /* "ts0000" */
+        /*Note: "ts0001" through "tsFFFF" are also valid signatures defined using macro icSpectralColorSpaceSig()*/
+
+        icSigRadiantSpectralData = 0x65730000, /* "es0000" */
+        /*Note: "ts0001" through "tsFFFF" are also valid signatures defined using macro icSpectralColorSpaceSig()*/
+
+        icSigBiSpectralReflectanceData = 0x62730000, /* "bs0000" */
+        /*Note: "bs0001" through "bsFFFF" are also valid signatures defined using macro icSpectralColorSpaceSig(*)*/
+
+        icSigSparseMatrixReflectanceData = 0x736D0000, /* "sm0000" */
+        /*Note: "sm0001" through "smFFFF" are also valid signatures defined using macro icSpectralColorSpaceSig(*)*/
+
+    }
+
+    public enum icMaterialColorSignature : uint
+    {
+        icSigNoMCSData = 0x00000000,
+        icSigMCSData = 0x6d630000,  /* "mc0000" */
+        /*Note: "nc0001" through "ncFFFF" are also valid signatures defined using macro icNColorSpaceSig()*/
+    }
+    
 
     public static class Global
     {
@@ -511,6 +691,12 @@ namespace RefIccMax.IccProfLib
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double ICC_CBRTF(double v) { return Math.Pow(v, 1.0 / 3.0); }
 
+        public static icColorSpaceSignature icGetColorSpaceType(icUInt32Number sig) { return ((icColorSpaceSignature)(((icUInt32Number)sig) & 0xffff0000)); }
+        public static bool icIsSameColorSpaceType(icUInt32Number sig, icUInt32Number type) { return ((((icUInt32Number)sig) & 0xffff0000) == ((icUInt32Number)(type))); }
+        public static icUInt32Number icNumColorSpaceChannels(icUInt32Number sig) { return (((icUInt32Number)sig) & 0x0000ffff); }
+        public static icColorSpaceSignature icNColorSpaceSig(icUInt32Number type, icUInt32Number n) { return ((icColorSpaceSignature)(icGetColorSpaceType(type) + icNumColorSpaceChannels(n))); }
+        public static icSpectralColorSignature icSpectralColorSpaceSig(icUInt32Number type, icUInt32Number n) { return ((icSpectralColorSignature)(icGetColorSpaceType(type) + icNumColorSpaceChannels(n))); }
+
         /** Convenience Enum Definitions - Not defined in ICC specification*/
         public const icTagSignature icSigUnknownTag = ((icTagSignature)0x3f3f3f3f);  /* '????' */
         public const icTagSignature icMaxEnumTag = ((icTagSignature)0xFFFFFFFF);
@@ -527,5 +713,20 @@ namespace RefIccMax.IccProfLib
         public const icBrdfMemberSignature icMaxBrdfMember = ((icBrdfMemberSignature)0xFFFFFFFF);
         public const icColorantInfoMemberSignature icSigCinfUnknownMbr=  ((icColorantInfoMemberSignature)0x3f3f3f3f);  /* '????' */
         public const icColorantInfoMemberSignature icMaxCinfMbr = ((icColorantInfoMemberSignature)0xFFFFFFFF);
+        public const icColorEncodingParamsMemberSignature icSigCeptUnknownMbr = ((icColorEncodingParamsMemberSignature)0x3f3f3f3f);  /* '????' */
+        public const icColorEncodingParamsMemberSignature icMaxCeptMbr = ((icColorEncodingParamsMemberSignature)0xFFFFFFFF);
+        public const icMeasurementInfoMemberSignature icSigMeasUnknownMbr = ((icMeasurementInfoMemberSignature)0x3f3f3f3f);  /* '????' */
+        public const icMeasurementInfoMemberSignature icMaxMeasMbr = ((icMeasurementInfoMemberSignature)0xFFFFFFFF);
+        public const icNamedColorlMemberSignature icSigNmclUnknownMbr = ((icNamedColorlMemberSignature)0x3f3f3f3f);  /* '????' */
+        public const icNamedColorlMemberSignature icMaxNmclMbr = ((icNamedColorlMemberSignature)0xFFFFFFFF);
+        public const icProfileInfoMemberSignature icSigPinfUnknownMbr = ((icProfileInfoMemberSignature)0x3f3f3f3f);  /* '????' */
+        public const icProfileInfoMemberSignature icMaxPinfMbr = ((icProfileInfoMemberSignature)0xFFFFFFFF);
+        public const icTintZeroMemberSignature icSigTnt0UnknownMbr = ((icTintZeroMemberSignature)0x3f3f3f3f);  /* '????' */
+        public const icTintZeroMemberSignature icMaxTnt0Mbr = ((icTintZeroMemberSignature)0xFFFFFFFF);
+        public const icColorSpaceSignature icSigGamutData = ((icColorSpaceSignature)0x67616D74);  /* 'gamt' */
+        public const icColorSpaceSignature icSigBRDFParameters = ((icColorSpaceSignature)0x62700000);  /* "bp0000" */
+        public const icColorSpaceSignature icSigBRDFDirect = ((icColorSpaceSignature)0x62640000);  /* "bd0000" */
+        public const icColorSpaceSignature icColorSpaceSignatureicSigUnknownData = ((icColorSpaceSignature)0x3f3f3f3f);  /* '????' */
+        public const icColorSpaceSignature icMaxEnumData = ((icColorSpaceSignature)0xFFFFFFFF);
     }
 }
