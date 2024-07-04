@@ -52,6 +52,14 @@ global using icFloat64Number = double;
 /** 16-bit unicode characters **/
 global using icUnicodeChar = ushort;
 
+/**
+ * MPE Future Extension Acs signature
+ */
+
+global using icAcsSignature = uint;
+
+global using icLanguageCode = ushort;
+
 
 using System;
 using System.Collections.Generic;
@@ -783,7 +791,130 @@ namespace RefIccMax.IccProfLib
         icSigToneMapFunction = 0x6d617066,  /* 'mapf' */
     }
 
+    /** Enum to identify single segment curve / clut2 element storage type **/
+    public enum icValueEncodingType
+    : uint
+    {
+        icValueTypeFloat32 = 0,
+        icValueTypeFloat16,
+        icValueTypeUInt16,
+        icValueTypeUInt8,
+    }
 
+    /*------------------------------------------------------------------------*/
+
+    /**
+     * Other enums
+     */
+
+    /** Measurement Flare, used in the measurmentType tag */
+    public enum icMeasurementFlare
+     : uint
+    {
+        icFlare0 = 0x00000000,  /* 0% flare */
+        icFlare100 = 0x00000001,  /* 100% flare */
+    }
+
+    /** Measurement Geometry, used in the measurmentType tag */
+    public enum icMeasurementGeometry
+     : uint
+    {
+        icGeometryUnknown = 0x00000000,  /* Unknown geometry */
+        icGeometry045or450 = 0x00000001,  /* 0/45, 45/0 */
+        icGeometry0dord0 = 0x00000002,  /* 0/d or d/0 */
+    }
+
+    /** Rendering Intents, used in the profile header */
+    public enum icRenderingIntent
+     : uint
+    {
+        icPerceptual = 0,
+        icRelativeColorimetric = 1,
+        icRelative = 1,
+        icSaturation = 2,
+        icAbsoluteColorimetric = 3,
+        icAbsolute = 3,
+    }
+
+    /** Different Spot Shapes currently defined, used for screeningType */
+    public enum icSpotShape
+    : uint
+    {
+        icSpotShapeUnknown = 0,
+        icSpotShapePrinterDefault = 1,
+        icSpotShapeRound = 2,
+        icSpotShapeDiamond = 3,
+        icSpotShapeEllipse = 4,
+        icSpotShapeLine = 5,
+        icSpotShapeSquare = 6,
+        icSpotShapeCross = 7,
+    }
+
+    /** Standard Observer, used in the measurmentType tag */
+    public enum icStandardObserver
+    : uint
+    {
+        icStdObsUnknown = 0x00000000,  /* Unknown observer */
+        icStdObs1931TwoDegrees = 0x00000001,  /* 1931 two degrees */
+        icStdObs1964TenDegrees = 0x00000002,  /* 1961 ten degrees */
+    }
+
+    /** Pre-defined illuminants, used in measurement and viewing conditions type */
+    public enum icIlluminant
+    : uint
+    {
+        icIlluminantUnknown = 0x00000000,
+        icIlluminantD50 = 0x00000001,
+        icIlluminantD65 = 0x00000002,
+        icIlluminantD93 = 0x00000003,
+        icIlluminantF2 = 0x00000004,
+        icIlluminantD55 = 0x00000005,
+        icIlluminantA = 0x00000006,
+        icIlluminantEquiPowerE = 0x00000007,  /* Equi-Power (E) */
+        icIlluminantF8 = 0x00000008,
+
+        /* The following illuminants are defined for V5 */
+        icIlluminantBlackBody = 0x00000009,  /* defined by CCT */
+        icIlluminantDaylight = 0x0000000A,  /* defiend by CCT */
+        icIlluminantB = 0x0000000B,
+        icIlluminantC = 0x0000000C,
+        icIlluminantF1 = 0x0000000D,
+        icIlluminantF3 = 0x0000000E,
+        icIlluminantF4 = 0x0000000F,
+        icIlluminantF5 = 0x00000010,
+        icIlluminantF6 = 0x00000011,
+        icIlluminantF7 = 0x00000012,
+        icIlluminantF9 = 0x00000013,
+        icIlluminantF10 = 0x00000014,
+        icIlluminantF11 = 0x00000015,
+        icIlluminantF12 = 0x00000016,
+    }
+
+
+    /** 
+ * A not so exhaustive list of ISO 369 Language Codes 
+ * Convenience definition - Not defined in ICC specification 
+ * ICC.1 constrains to 16 bit (2 characters)
+ * See https://www.iso.org/iso-639-language-codes.html
+ */
+ public enum icEnumLanguageCode
+    : icUInt16Number {
+        icLanguageCodeEnglish = 0x656E, /* 'en' */
+        icLanguageCodeGerman = 0x6465, /* 'de' */
+        icLanguageCodeItalian = 0x6974, /* 'it' */
+        icLanguageCodeDutch = 0x6E6C, /* 'nl' */
+        icLanguageCodeSweden = 0x7376, /* 'sv' */
+        icLanguageCodeSpanish = 0x6573, /* 'es' */
+        icLanguageCodeDanish = 0x6461, /* 'da' */
+        icLanguageCodeNorwegian = 0x6E6F, /* 'no' */
+        icLanguageCodeJapanese = 0x6A61, /* 'ja' */
+        icLanguageCodeFinnish = 0x6669, /* 'fi' */
+        icLanguageCodeTurkish = 0x7472, /* 'tr' */
+        icLanguageCodeKorean = 0x6B6F, /* 'ko' */
+        icLanguageCodeChinese = 0x7A68, /* 'zh' */
+        icLanguageCodeFrench = 0x6672, /* 'fr' */
+    }
+    
     public static class Global
     {
         /** 
@@ -841,6 +972,17 @@ namespace RefIccMax.IccProfLib
         public const double icPerceptualRefWhiteY = 1.0000;
         public const double icPerceptualRefWhiteZ = 0.8249;
 
+        /**
+ * MPE Spectral Data Conversion flags.
+ */
+        public const uint icRelativeSpectralData = 0x00000000;     /* Bit position 0 */
+        public const uint icAbsoluteSpectralData = 0x00000001;     /* Bit position 0 */
+        public const uint icXYZSpectralData = 0x00000000;     /* Bit position 1 */
+        public const uint icLabSpectralData = 0x00000002;     /* Bit position 1 */
+
+
+        public const icStandardObserver icStdObsCustom = icStandardObserver.icStdObsUnknown;
+        public const icIlluminant icIlluminantCustom = icIlluminant.icIlluminantUnknown;
 
         //TODO can these be moved to their respective enums?
         /** Convenience Enum Definitions - Not defined in ICC specification*/
@@ -883,6 +1025,18 @@ namespace RefIccMax.IccProfLib
         public const icCurveElemSignature icMaxCurveElemSignature = ((icCurveElemSignature)0xFFFFFFFF);
         public const icSingleSampledCurveType icMaxSingleSampledCurveType = icSingleSampledCurveType.icExtendSingleSampledCurve;
         public const icToneFunctionSignature icMaxToneFunctionsSignature = ((icToneFunctionSignature)0xFFFFFFFF);
-
+        public const icValueEncodingType icMaxValueType = icValueEncodingType.icValueTypeUInt8;
+        public const icAcsSignature icSigAcsZero = ((icAcsSignature)0x00000000);
+        public const icMeasurementFlare icMaxEnumFlare = ((icMeasurementFlare)0xFFFFFFFF);
+        public const icMeasurementFlare icMaxFlare = ((icMeasurementFlare)0xFFFFFFFF); /* as defined by earlier versions */
+        public const icMeasurementGeometry icMaxEnumGeometry = ((icMeasurementGeometry)0xFFFFFFFF);
+        public const icMeasurementGeometry icMaxGeometry = ((icMeasurementGeometry)0xFFFFFFFF);
+        public const icRenderingIntent icUnknownIntent = ((icRenderingIntent)0x3f3f3f3f);  /* '????' */
+        public const icRenderingIntent icMaxEnumIntent = ((icRenderingIntent)0xFFFFFFFF);
+        public const icSpotShape icMaxEnumSpot = ((icSpotShape)0xFFFFFFFF);
+        public const icStandardObserver icMaxEnumStdObs = ((icStandardObserver)0xFFFFFFFF);
+        public const icStandardObserver icMaxStdObs = ((icStandardObserver)0xFFFFFFFF); /* as defined by earlier versions */
+        public const icIlluminant icMaxEnumIlluminant = ((icIlluminant)0xFFFFFFFF);
+        public const icIlluminant icMaxEnumIluminant = ((icIlluminant)0xFFFFFFFF);   /* as defined by earlier versions */
     }
 }
