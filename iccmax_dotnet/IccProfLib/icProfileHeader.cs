@@ -481,8 +481,9 @@ namespace RefIccMax.IccProfLib
     /**
 * ColorEncodingParamsStructure (icSigColorEncodingParamsStruct) Member Tag signatures
 */
-public enum icColorEncodingParamsMemberSignature
-     : uint {
+    public enum icColorEncodingParamsMemberSignature
+         : uint
+    {
         icSigCeptBluePrimaryXYZMbr = 0x6258595a,  /* bXYZ' */
         icSigCeptGreenPrimaryXYZMbr = 0x6758595a,  /* gXYZ' */
         icSigCeptRedPrimaryXYZMbr = 0x7258595a,  /* rXYZ' */
@@ -510,8 +511,9 @@ public enum icColorEncodingParamsMemberSignature
     /**
 * MeasurementInfoStructure (icSigMeasurementInfoStruct) Member Tag signatures
 */
- public enum icMeasurementInfoMemberSignature
-    : uint {
+    public enum icMeasurementInfoMemberSignature
+       : uint
+    {
         icSigMeasBackingMbr = 0x6d62616b, /* 'mbak' */
         icSigMeasFlareMbr = 0x6d666c72, /* 'mflr' */
         icSigMeasGeometryMbr = 0x6d67656f, /* 'mgeo' */
@@ -523,8 +525,9 @@ public enum icColorEncodingParamsMemberSignature
     /**
 * NamedColorStructure (icSigNamedColorStruct) Member Tag signatures
 */
- public enum icNamedColorlMemberSignature
-     : uint {
+    public enum icNamedColorlMemberSignature
+        : uint
+    {
         icSigNmclBrdfColorimetricMbr = 0x62636f6c,  /* 'bcol' */
         icSigNmclBrdfColorimetricParamsMbr = 0x62637072,  /* 'bcpr' */
         icSigNmclBrdfSpectralMbr = 0x62737063,  /* 'bspc' */
@@ -543,8 +546,9 @@ public enum icColorEncodingParamsMemberSignature
     /**
 * ProfileInfoStructure (icSigProfileInfoStruct) Member Tag signatures
 */
- public enum icProfileInfoMemberSignature
-    : uint {
+    public enum icProfileInfoMemberSignature
+       : uint
+    {
         icSigPinfAttributesMbr = 0x61747472, /* 'attr' */
         icSigPinfProfileDescMbr = 0x70647363, /* 'pdsc' */
         icSigPinfProfileIDMbr = 0x70696420, /* 'pid ' */
@@ -559,8 +563,8 @@ public enum icColorEncodingParamsMemberSignature
     /**
 * TintZeroStructure (icSigTintZeroStruct) Member Tag signatures
 */
-public enum icTintZeroMemberSignature : uint
-     {
+    public enum icTintZeroMemberSignature : uint
+    {
         icSigTnt0DeviceDataMbr = 0x64657620,  /* 'dev ' */
         icSigTnt0PcsDataMbr = 0x70637320,  /* 'pcs ' */
         icSigTnt0SpectralDataMbr = 0x73706563,  /* 'spec' */
@@ -573,8 +577,9 @@ public enum icTintZeroMemberSignature : uint
  * Note that only icSigXYZData and icSigLabData are valid
  * Profile Connection Spaces (PCSs)
  */
- public enum icColorSpaceSignature
-    : uint {
+    public enum icColorSpaceSignature
+       : uint
+    {
         icSigNoColorData = 0x00000000,
 
         icSigXYZData = 0x58595A20,  /* 'XYZ ' */
@@ -631,8 +636,9 @@ public enum icTintZeroMemberSignature : uint
     }
 
     /** icSpectralColorSignature enumerations */
-   public enum icSpectralColorSignature
-     : uint {
+    public enum icSpectralColorSignature
+      : uint
+    {
         icSigNoSpectralData = 0x00000000,
         icSigReflectanceSpectralData = 0x72730000, /* "rs0000" */
         /*Note: "rs0001" through "rsFFFF" are also valid signatures defined using macro icSpectralColorSpaceSig()*/
@@ -659,7 +665,8 @@ public enum icTintZeroMemberSignature : uint
     }
 
     /** profileClass enumerations */
-    public enum icProfileClassSignature : uint{
+    public enum icProfileClassSignature : uint
+    {
         icSigInputClass = 0x73636E72,  /* 'scnr' */
         icSigDisplayClass = 0x6D6E7472,  /* 'mntr' */
         icSigOutputClass = 0x70727472,  /* 'prtr' */
@@ -674,8 +681,9 @@ public enum icTintZeroMemberSignature : uint
     }
 
     /** Platform Signatures */
-   public enum icPlatformSignature
-     : uint {
+    public enum icPlatformSignature
+      : uint
+    {
         icSigMacintosh = 0x4150504C,  /* 'APPL' */
         icSigMicrosoft = 0x4D534654,  /* 'MSFT' */
         icSigSolaris = 0x53554E57,  /* 'SUNW' */
@@ -686,7 +694,8 @@ public enum icTintZeroMemberSignature : uint
 
     /** CMM signatures from the signature registry (as of Mar 6, 2018) */
     public enum icCmmSignature
-    : uint {
+    : uint
+    {
         icSigAdobe = 0x41444245,  /* 'ADBE' */
         icSigAgfa = 0x41434D53,  /* 'ACMS' */
         icSigApple = 0x6170706C,  /* 'appl' */
@@ -717,7 +726,7 @@ public enum icTintZeroMemberSignature : uint
         icSigZoran = 0x7a633030,  /* 'zc00' */
         icSigUnknownCmm = 0x00000000,
     }
-   
+
 
     public static class Global
     {
@@ -768,6 +777,15 @@ public enum icTintZeroMemberSignature : uint
         /* Default luminance (cd/m^2) for converting between Luminance based and Normalized colorimetry */
         public const uint icDefaultLuminance = 160;
 
+        // moved from IccCmm.h
+        public const double icPerceptualRefBlackX = 0.00336;
+        public const double icPerceptualRefBlackY = 0.0034731;
+        public const double icPerceptualRefBlackZ = 0.00287;
+        public const double icPerceptualRefWhiteX = 0.9642;
+        public const double icPerceptualRefWhiteY = 1.0000;
+        public const double icPerceptualRefWhiteZ = 0.8249;
+
+
         //TODO can these be moved to their respective enums?
         /** Convenience Enum Definitions - Not defined in ICC specification*/
         public const icTagSignature icSigUnknownTag = ((icTagSignature)0x3f3f3f3f);  /* '????' */
@@ -783,7 +801,7 @@ public enum icTintZeroMemberSignature : uint
         public const icElemTypeSignature icMaxEnumElemType = ((icElemTypeSignature)0xFFFFFFFF);
         public const icBrdfMemberSignature icSigUnknownBrdfMember = ((icBrdfMemberSignature)0x3f3f3f3f);  /* '????' */
         public const icBrdfMemberSignature icMaxBrdfMember = ((icBrdfMemberSignature)0xFFFFFFFF);
-        public const icColorantInfoMemberSignature icSigCinfUnknownMbr=  ((icColorantInfoMemberSignature)0x3f3f3f3f);  /* '????' */
+        public const icColorantInfoMemberSignature icSigCinfUnknownMbr = ((icColorantInfoMemberSignature)0x3f3f3f3f);  /* '????' */
         public const icColorantInfoMemberSignature icMaxCinfMbr = ((icColorantInfoMemberSignature)0xFFFFFFFF);
         public const icColorEncodingParamsMemberSignature icSigCeptUnknownMbr = ((icColorEncodingParamsMemberSignature)0x3f3f3f3f);  /* '????' */
         public const icColorEncodingParamsMemberSignature icMaxCeptMbr = ((icColorEncodingParamsMemberSignature)0xFFFFFFFF);
