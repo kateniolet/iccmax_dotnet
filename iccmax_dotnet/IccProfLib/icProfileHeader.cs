@@ -729,20 +729,60 @@ namespace RefIccMax.IccProfLib
 
     /** Rendering Intent Gamut Signatures */
     public enum icReferenceMediumGamutSignature
-     : uint {
+     : uint
+    {
         icSigPerceptualReferenceMediumGamut = 0x70726d67,  /* 'prmg' */
     }
 
     /** Colorimetric Intent Image State Gamut Signatures */
     public enum icColorimetricIntentImageStateSignature
-     : uint {
+     : uint
+    {
         icSigSceneColorimetryEstimates = 0x73636F65,  /* 'scoe' */
         icSigSceneAppearanceEstimates = 0x73617065,  /* 'sape' */
         icSigFocalPlaneColorimetryEstimates = 0x66706365,  /* 'fpce' */
         icSigReflectionHardcopyOriginalColorimetry = 0x72686F63,  /* 'rhoc' */
         icSigReflectionPrintOutputColorimetry = 0x72706F63,  /* 'rpoc' */
     }
-    
+
+    /**
+ * MPE Curve segment Signatures
+ */
+    public enum icCurveSegSignature
+    : uint
+    {
+        icSigFormulaCurveSeg = 0x70617266,  /* 'parf' */
+        icSigSampledCurveSeg = 0x73616D66,  /* 'samf' */
+    }
+
+    /**
+ * MPE Curve Set Curve signature
+ */
+    public enum icCurveElemSignature
+     : uint
+    {
+        icSigSegmentedCurve = 0x63757266,  /* 'curf' */
+        icSigSingleSampledCurve = 0x736e6766,  /* 'sngf' */
+        icSigSampledCalculatorCurve = 0x636c6366,  /* 'clcf' */
+    }
+
+    /** Enum for defining type of Single Sampled Curve**/
+    public enum icSingleSampledCurveType
+    : uint
+    {
+        icClipSingleSampledCurve = 0,
+        icExtendSingleSampledCurve
+    }
+
+    /**
+ * MPE Tone Map Function signature
+ */
+    public enum icToneFunctionSignature
+     : uint
+    {
+        icSigToneMapFunction = 0x6d617066,  /* 'mapf' */
+    }
+
 
     public static class Global
     {
@@ -839,5 +879,10 @@ namespace RefIccMax.IccProfLib
         public const icCmmSignature icMaxEnumCmm = ((icCmmSignature)0xFFFFFFFF);
         public const icReferenceMediumGamutSignature icMaxEnumReferenceMediumGamut = ((icReferenceMediumGamutSignature)0xFFFFFFFF);
         public const icColorimetricIntentImageStateSignature icMaxEnumColorimetricIntentImageState = ((icColorimetricIntentImageStateSignature)0xFFFFFFFF);
+        public const icCurveSegSignature icMaxCurveSegSignature = ((icCurveSegSignature)0xFFFFFFFF);
+        public const icCurveElemSignature icMaxCurveElemSignature = ((icCurveElemSignature)0xFFFFFFFF);
+        public const icSingleSampledCurveType icMaxSingleSampledCurveType = icSingleSampledCurveType.icExtendSingleSampledCurve;
+        public const icToneFunctionSignature icMaxToneFunctionsSignature = ((icToneFunctionSignature)0xFFFFFFFF);
+
     }
 }
