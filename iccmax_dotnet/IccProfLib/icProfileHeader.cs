@@ -727,6 +727,22 @@ namespace RefIccMax.IccProfLib
         icSigUnknownCmm = 0x00000000,
     }
 
+    /** Rendering Intent Gamut Signatures */
+    public enum icReferenceMediumGamutSignature
+     : uint {
+        icSigPerceptualReferenceMediumGamut = 0x70726d67,  /* 'prmg' */
+    }
+
+    /** Colorimetric Intent Image State Gamut Signatures */
+    public enum icColorimetricIntentImageStateSignature
+     : uint {
+        icSigSceneColorimetryEstimates = 0x73636F65,  /* 'scoe' */
+        icSigSceneAppearanceEstimates = 0x73617065,  /* 'sape' */
+        icSigFocalPlaneColorimetryEstimates = 0x66706365,  /* 'fpce' */
+        icSigReflectionHardcopyOriginalColorimetry = 0x72686F63,  /* 'rhoc' */
+        icSigReflectionPrintOutputColorimetry = 0x72706F63,  /* 'rpoc' */
+    }
+    
 
     public static class Global
     {
@@ -821,5 +837,7 @@ namespace RefIccMax.IccProfLib
         public const icProfileClassSignature icMaxEnumClass = ((icProfileClassSignature)0xFFFFFFFF);
         public const icPlatformSignature icMaxEnumPlatform = ((icPlatformSignature)0xFFFFFFFF);
         public const icCmmSignature icMaxEnumCmm = ((icCmmSignature)0xFFFFFFFF);
+        public const icReferenceMediumGamutSignature icMaxEnumReferenceMediumGamut = ((icReferenceMediumGamutSignature)0xFFFFFFFF);
+        public const icColorimetricIntentImageStateSignature icMaxEnumColorimetricIntentImageState = ((icColorimetricIntentImageStateSignature)0xFFFFFFFF);
     }
 }
