@@ -2049,6 +2049,14 @@ namespace RefIccMax.IccProfLib
         public const ushort icRange700nm = 0x6178;
         public const ushort icRange780nm = 0x6218;
 
+        //From IccUtil.h
+        public const double icPiNum = 3.14159265358979323846;
+        public const double icPosInfinity = Double.PositiveInfinity;
+        public const double icNegInfinity = Double.NegativeInfinity;
+        public const double icNotANumber = Double.NaN;
+        public static bool icNotZero(double v) { return ((v)>1.0e-8 || (v)<-1.0e-8); }
+
+
         //TODO can these be moved to their respective enums?
         /** Convenience Enum Definitions - Not defined in ICC specification*/
         public const icTagSignature icSigUnknownTag = ((icTagSignature)0x3f3f3f3f);  /* '????' */
