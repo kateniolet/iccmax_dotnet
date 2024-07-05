@@ -59,6 +59,7 @@ global using icUnicodeChar = ushort;
 global using icAcsSignature = uint;
 
 global using icLanguageCode = ushort;
+global using icCountryCode = ushort;
 
 
 using System;
@@ -897,8 +898,9 @@ namespace RefIccMax.IccProfLib
  * ICC.1 constrains to 16 bit (2 characters)
  * See https://www.iso.org/iso-639-language-codes.html
  */
- public enum icEnumLanguageCode
-    : icUInt16Number {
+    public enum icEnumLanguageCode
+       : icUInt16Number
+    {
         icLanguageCodeEnglish = 0x656E, /* 'en' */
         icLanguageCodeGerman = 0x6465, /* 'de' */
         icLanguageCodeItalian = 0x6974, /* 'it' */
@@ -914,7 +916,279 @@ namespace RefIccMax.IccProfLib
         icLanguageCodeChinese = 0x7A68, /* 'zh' */
         icLanguageCodeFrench = 0x6672, /* 'fr' */
     }
-    
+
+    /**
+ * A not so exhaustive list of ISO 3166 country codes.
+ * Convenience definition - Not defined in ICC specification 
+ * ICC.1 constrains to 16 bit (2 characters)
+ * See https://www.iso.org/iso-3166-country-codes.html 
+ */
+    public enum icEnumCountryCode
+     : icUInt16Number
+    {
+        icCountryCodeUSA = 0x5553, /* 'US' */
+        icCountryCodeUnitedKingdom = 0x554B, /* 'UK' */
+        icCountryCodeGermany = 0x4445, /* 'DE' */
+        icCountryCodeItaly = 0x4954, /* 'IT' */
+        icCountryCodeNetherlands = 0x4E4C, /* 'NL' */
+        icCountryCodeSpain = 0x4543, /* 'ES' */
+        icCountryCodeDenmark = 0x444B, /* 'DK' */
+        icCountryCodeNorway = 0x4E4F, /* 'NO' */
+        icCountryCodeJapan = 0x4A50, /* 'JP' */
+        icCountryCodeFinland = 0x4649, /* 'FI' */
+        icCountryCodeTurkey = 0x5452, /* 'TR' */
+        icCountryCodeKorea = 0x4B52, /* 'KR' */
+        icCountryCodeChina = 0x434E, /* 'CN' */
+        icCountryCodeTaiwan = 0x5457, /* 'TW' */
+        icCountryCodeFrance = 0x4652, /* 'FR' */
+    }
+
+    /** Measurement Unit Signatures used in ResponseCurveSet16Type */
+    public enum icMeasurementUnitSig
+    : uint
+    {
+        icSigStatusA = 0x53746141, /* 'StaA' */
+        icSigStatusE = 0x53746145, /* 'StaE' */
+        icSigStatusI = 0x53746149, /* 'StaI' */
+        icSigStatusT = 0x53746154, /* 'StaT' */
+        icSigStatusM = 0x5374614D, /* 'StaM' */
+        icSigDN = 0x444E2020, /* 'DN  ' */
+        icSigDNP = 0x444E2050, /* 'DN P' */
+        icSigDNN = 0x444E4E20, /* 'DNN ' */
+        icSigDNNP = 0x444E4E50, /* 'DNNP' */
+    }
+
+    /** Colorant and Phosphor Encodings used in chromaticity type */
+    public enum icColorantEncoding
+     : ushort
+    {
+        icColorantUnknown = 0x0000, /* Unknown */
+        icColorantITU = 0x0001, /* ITU-R BT.709 */
+        icColorantSMPTE = 0x0002, /* SMPTE RP145-1994 */
+        icColorantEBU = 0x0003, /* EBU Tech.3213-E */
+        icColorantP22 = 0x0004, /* P22 */
+    }
+
+    /**
+ * Note: The next three enum types are for DeviceSettingType structures 
+ * supported by V2 profiles.  The DeviceSettingsType was removed in the
+ * V4 specificaiton.*/
+
+    /** DeviceSettingsType structure ID signatures for Microsoft 'msft' platform*/
+    public enum icMSFTDevSetSig
+    : uint
+    {
+        icMSFTDevSetResolution = 0x72736C6E, /* 'rsln' */
+        icMSFTDevSetMediaType = 0x6D747970, /* 'mtyp' */
+        icMSFTDevSetMediaHalftone = 0x6866746E, /* 'hftn' */
+    }
+
+    /** DeviceSettingsType media encodings for Microsoft 'msft' platform */
+    public enum icDMMediaType
+    : ushort
+    {
+        icDMMediaStandard = 0x0001, /* Standard paper */
+        icDMMediaTransparancy = 0x0002, /* Transparency */
+        icDMMediaGlossy = 0x0003, /* Glossy paper */
+        icDMMediaUser = 0x0100, /* Device-specific type media
+                                                  are >= 256 */
+    }
+
+    /** DeviceSettingsType media encodings for Microsoft 'msft' platform */
+    public enum icDMHalftoneType
+    : ushort
+    {
+        icDMDitherNone = 0x0001, /* No dithering */
+        icDMDitherCoarse = 0x0002, /* Dither with a coarse brush */
+        icDMDitherFine = 0x0003, /* Dither with a fine brush */
+        icDMDitherLineArt = 0x0004, /* LineArt dithering */
+        icDMDitherErrorDiffusion = 0x0005, /* Error Diffusion */
+        icDMDitherReserved6 = 0x0006,
+        icDMDitherReserved7 = 0x0007,
+        icDMDitherReserved8 = 0x0008,
+        icDMDitherReserved9 = 0x0009,
+        icDMDitherGrayscale = 0x000A, /* Device does grayscaling */
+        icDMDitherUser = 0x0100, /* Device-specifice halftones 
+                                                  are >= 256 */
+    }
+
+    public enum icSparseMatrixType
+    : ushort
+    {
+        icSparseMatrixUInt8 = 0x0001,
+        icSparseMatrixUInt16 = 0x0002,
+        icSparseMatrixFloat16 = 0x0003,
+        icSparseMatrixFloat32 = 0x0004,
+    }
+
+    /* Image encoding type encodings for embeddedHeightImageType and embeddedNormalImageType*/
+    public enum icImageEncodingType
+    : ushort
+    {
+        icPngImageType = 0x0000,
+        icTiffImageType = 0x0001,
+    }
+
+    /**
+*------------------------------------------------------------------------
+*
+ * Arrays of numbers 
+ */
+
+    /** Int8 Array */
+    public struct icInt8Array
+    {
+        icInt8Number[] data;    /* Variable array of values */
+    }
+
+    /** UInt8 Array */
+    public struct icUInt8Array
+    {
+        icUInt8Number[] data;    /* Variable array of values */
+    }
+
+
+    /** uInt16 Array */
+    public struct icUInt16Array
+    {
+        icUInt16Number[] data;    /* Variable array of values */
+    }
+
+
+    /** Int16 Array */
+    public struct icInt16Array
+    {
+        icInt16Number[] data;    /* Variable array of values */
+    }
+
+
+    /** uInt32 Array */
+    public struct icUInt32Array
+    {
+        icUInt32Number[] data;    /* Variable array of values */
+    }
+
+
+    /** Int32 Array */
+    public struct icInt32Array
+    {
+        icInt32Number[] data;    /* Variable array of values */
+    }
+
+
+    /** UInt64 Array */
+    public struct icUInt64Array
+    {
+        icUInt64Number[] data;    /* Variable array of values */
+    }
+
+
+    /** Int64 Array */
+    public struct icInt64Array
+    {
+        icInt64Number[] data;    /* Variable array of values */
+    }
+
+    /** u16Fixed16 Array*/
+    public struct icU16Fixed16Array
+    {
+        icU16Fixed16Number[] data;    /* Variable array of values */
+    }
+
+
+    /** s15Fixed16 Array */
+    public struct icS15Fixed16Array
+    {
+        icS15Fixed16Number[] data;    /* Variable array of values */
+    }
+
+
+    /** The base date time number */
+    public struct icDateTimeNumber
+    {
+        icUInt16Number year;
+        icUInt16Number month;
+        icUInt16Number day;
+        icUInt16Number hours;
+        icUInt16Number minutes;
+        icUInt16Number seconds;
+    }
+
+    /** XYZ Number  */
+    public struct icXYZNumber
+    {
+        icS15Fixed16Number X;
+        icS15Fixed16Number Y;
+        icS15Fixed16Number Z;
+    }
+
+
+    /** XYZ Array */
+    public struct icXYZArray
+    {
+        icXYZNumber[] data;    /* Variable array of XYZ numbers */
+    }
+
+
+    /** Floting point XYZ */
+    public struct icFloatXYZNumber
+    {
+        icFloat32Number X;
+        icFloat32Number Y;
+        icFloat32Number Z;
+    }
+
+
+    /** xy Chromaticity Number  */
+    public struct icChromaticityNumber
+    {
+        icU16Fixed16Number x;
+        icU16Fixed16Number y;
+    }
+
+    /** response16Number  */
+    public struct icResponse16Number
+    {
+        icUInt16Number deviceCode;
+        icUInt16Number reserved;
+        icS15Fixed16Number measurementValue;
+    }
+
+
+    /** positionNumber **/
+    public struct icPositionNumber
+    {
+        icUInt32Number offset;
+        icUInt32Number size;
+    }
+
+
+    /** spectral range */
+    public struct icSpectralRange
+    {
+        icFloat16Number start;
+        icFloat16Number end;
+        icUInt16Number steps;
+    }
+
+    /** observer matrix */
+    public struct icObserverMatrix
+    {
+        icSpectralRange range;
+        icUInt16Number reserved;
+        icFloat32Number[] data;
+    }
+
+
+    /** Illuminant Vector */
+    public struct icIlluminantVector
+    {
+        icSpectralRange range;
+        icUInt16Number reserved;
+        icFloat32Number[] data;
+    }
+
+
     public static class Global
     {
         /** 
@@ -984,6 +1258,12 @@ namespace RefIccMax.IccProfLib
         public const icStandardObserver icStdObsCustom = icStandardObserver.icStdObsUnknown;
         public const icIlluminant icIlluminantCustom = icIlluminant.icIlluminantUnknown;
 
+        /** Useful spectral range numbers */
+        public const ushort icRange380nm = 0x5df0;
+        public const ushort icRange400nm = 0x5e40;
+        public const ushort icRange700nm = 0x6178;
+        public const ushort icRange780nm = 0x6218;
+
         //TODO can these be moved to their respective enums?
         /** Convenience Enum Definitions - Not defined in ICC specification*/
         public const icTagSignature icSigUnknownTag = ((icTagSignature)0x3f3f3f3f);  /* '????' */
@@ -1038,5 +1318,8 @@ namespace RefIccMax.IccProfLib
         public const icStandardObserver icMaxStdObs = ((icStandardObserver)0xFFFFFFFF); /* as defined by earlier versions */
         public const icIlluminant icMaxEnumIlluminant = ((icIlluminant)0xFFFFFFFF);
         public const icIlluminant icMaxEnumIluminant = ((icIlluminant)0xFFFFFFFF);   /* as defined by earlier versions */
+        public const icMeasurementUnitSig icMaxEnumMeasurmentUnitSig = ((icMeasurementUnitSig)0xffffffff);
+        public const icColorantEncoding icMaxEnumColorant = ((icColorantEncoding)0xFFFF);
+        public const icSparseMatrixType icSparseMatrixFloatNum = ((icSparseMatrixType)0x0000); //Use internal icFloatNumber encoding
     }
 }
