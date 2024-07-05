@@ -1188,6 +1188,791 @@ namespace RefIccMax.IccProfLib
         icFloat32Number[] data;
     }
 
+    /** Curve */
+    public struct icCurve
+    {
+        icUInt32Number count;          /* Number of entries */
+        icUInt16Number[] data;    /* The actual table data, real
+                                         * number is determined by count
+                                         * Interpretation depends on how
+                                         * data is used with a given tag
+                                         */
+    }
+
+    /** Parametric Curve */
+    public struct icParametricCurve
+    {
+        icUInt16Number funcType;       /* Function Type                */
+        /* 0 = gamma only               */
+        icUInt16Number pad;            /* Padding for byte alignment   */
+        icS15Fixed16Number gamma;          /* x°gamma                      */
+        /* up to 7 values Y,a,b,c,d,e,f */
+    }
+
+    /** Parametric Curve */
+    public struct icParametricCurveFull
+    {
+        icUInt16Number funcType;       /* Function Type                */
+        /* 0 = gamma only               */
+        icUInt16Number pad;            /* Padding for byte alignment   */
+        icS15Fixed16Number gamma;          /* x°gamma                      */
+        icS15Fixed16Number a;              /* a                            */
+        icS15Fixed16Number b;              /* b                            */
+        icS15Fixed16Number c;              /* c                            */
+        icS15Fixed16Number d;              /* d                            */
+        icS15Fixed16Number e;              /* e                            */
+        icS15Fixed16Number f;              /* f                            */
+    }
+
+    /** Data */
+    public struct icData
+    {
+        icDataBlockType dataFlag;       /* See icDataBlockType for details */
+        icInt8Number[] data;    /* Data, size determined from tag */
+    }
+
+    /** lut16 */
+    public struct icLut16
+    {
+        icUInt8Number inputChan;      /* Number of input channels */
+        icUInt8Number outputChan;     /* Number of output channels */
+        icUInt8Number clutPoints;     /* Number of clutTable grid points */
+        icInt8Number pad;            /* Padding for byte alignment */
+        icS15Fixed16Number e00;            /* e00 in the 3 * 3 */
+        icS15Fixed16Number e01;            /* e01 in the 3 * 3 */
+        icS15Fixed16Number e02;            /* e02 in the 3 * 3 */
+        icS15Fixed16Number e10;            /* e10 in the 3 * 3 */
+        icS15Fixed16Number e11;            /* e11 in the 3 * 3 */
+        icS15Fixed16Number e12;            /* e12 in the 3 * 3 */
+        icS15Fixed16Number e20;            /* e20 in the 3 * 3 */
+        icS15Fixed16Number e21;            /* e21 in the 3 * 3 */
+        icS15Fixed16Number e22;            /* e22 in the 3 * 3 */
+        icUInt16Number inputEnt;       /* Number of input table entries */
+        icUInt16Number outputEnt;      /* Number of output table entries */
+        icUInt16Number[] data;    /* Data follows see spec for size */
+        /**
+       *  Data that follows is of this form
+       *
+       *  icUInt16Number      inputTable[inputChan][icAny];   * The input table
+       *  icUInt16Number      clutTable[icAny];               * The clut table
+       *  icUInt16Number      outputTable[outputChan][icAny]; * The output table
+       */
+    }
+
+    /** lut8, input & output tables are always 256 bytes in length */
+    public struct icLut8
+    {
+        icUInt8Number inputChan;      /* Number of input channels */
+        icUInt8Number outputChan;     /* Number of output channels */
+        icUInt8Number clutPoints;     /* Number of clutTable grid points */
+        icInt8Number pad;
+        icS15Fixed16Number e00;            /* e00 in the 3 * 3 */
+        icS15Fixed16Number e01;            /* e01 in the 3 * 3 */
+        icS15Fixed16Number e02;            /* e02 in the 3 * 3 */
+        icS15Fixed16Number e10;            /* e10 in the 3 * 3 */
+        icS15Fixed16Number e11;            /* e11 in the 3 * 3 */
+        icS15Fixed16Number e12;            /* e12 in the 3 * 3 */
+        icS15Fixed16Number e20;            /* e20 in the 3 * 3 */
+        icS15Fixed16Number e21;            /* e21 in the 3 * 3 */
+        icS15Fixed16Number e22;            /* e22 in the 3 * 3 */
+        icUInt8Number[] data;    /* Data follows see spec for size */
+        /**
+       *  Data that follows is of this form
+       *
+       *  icUInt8Number       inputTable[inputChan][256];     * The input table
+       *  icUInt8Number       clutTable[icAny];               * The clut table
+       *  icUInt8Number       outputTable[outputChan][256];   * The output table
+       */
+    }
+
+    /** icLutAToB  */
+    public struct icCLutStruct
+    {
+
+        icUInt8Number[] gridPoints = new icUInt8Number[16]; /* Number of grid points in each dimension.  */
+        icUInt8Number prec;           /* Precision of data elements in bytes.      */
+        icUInt8Number pad1;
+        icUInt8Number pad2;
+        icUInt8Number pad3;
+        /*icUInt8Number     data[icAny];     Data follows see spec for size */
+
+        public icCLutStruct(byte[] gridPoints, byte prec, byte pad1, byte pad2, byte pad3)
+        {
+            this.gridPoints = gridPoints;
+            this.prec = prec;
+            this.pad1 = pad1;
+            this.pad2 = pad2;
+            this.pad3 = pad3;
+        }
+
+        public icCLutStruct()
+        {
+        }
+    }
+
+
+    /** icLutAtoB  */
+    public struct icLutAtoB
+    {
+        icUInt8Number inputChan;      /* Number of input channels     */
+        icUInt8Number outputChan;     /* Number of output channels    */
+        icUInt8Number pad1;
+        icUInt8Number pad2;
+        icUInt32Number offsetB;        /* Offset to first "B" curve    */
+        icUInt32Number offsetMat;      /* Offset to matrix             */
+        icUInt32Number offsetM;        /* Offset to first "M" curve    */
+        icUInt32Number offsetC;        /* Offset to CLUT               */
+        icUInt32Number offsetA;        /* Offset to first "A" curve    */
+        /*icUInt8Number     data[icAny];     Data follows see spec for size */
+    }
+
+    /** icLutBtoA  */
+    public struct icLutBtoA
+    {
+        icUInt8Number inputChan;      /* Number of input channels     */
+        icUInt8Number outputChan;     /* Number of output channels    */
+        icUInt8Number pad1;
+        icUInt8Number pad2;
+        icUInt32Number offsetB;        /* Offset to first "B" curve    */
+        icUInt32Number offsetMat;      /* Offset to matrix             */
+        icUInt32Number offsetM;        /* Offset to first "M" curve    */
+        icUInt32Number offsetC;        /* Offset to CLUT               */
+        icUInt32Number offsetA;        /* Offset to first "A" curve    */
+        /*icUInt8Number     data[icAny];     Data follows see spec for size */
+    }
+
+
+    /** Measurement Data */
+    public struct icMeasurement
+    {
+        icStandardObserver stdObserver;    /* Standard observer */
+        icXYZNumber backing;        /* XYZ for backing material */
+        icMeasurementGeometry geometry;       /* Measurement geometry */
+        icMeasurementFlare flare;          /* Measurement flare */
+        icIlluminant illuminant;     /* Illuminant */
+    }
+
+    /** Entry format for each named color */
+    public struct icNamedColor2Entry
+    {
+        icUInt8Number[] rootName = new icUInt8Number[32];        /* Root name for first color */
+        icUInt16Number[] pcsCoords = new icUInt16Number[3];        /* PCS coordinates of color (only Lab or XYZ allowed)*/
+        icUInt16Number[] deviceCoords; /* Device coordinates of color */
+
+        public icNamedColor2Entry(byte[] rootName, ushort[] pcsCoords, ushort[] deviceCoords)
+        {
+            this.rootName = rootName;
+            this.pcsCoords = pcsCoords;
+            this.deviceCoords = deviceCoords;
+        }
+
+        public icNamedColor2Entry()
+        {
+        }
+    }
+
+    /**
+ * icNamedColor2 takes the place of icNamedColor
+ */
+    public struct icNamedColor2
+    {
+        icUInt32Number vendorFlag;     /* Bottom 16 bits for IC use */
+        icUInt32Number count;          /* Count of named colors */
+        icUInt32Number nDeviceCoords;  /* Number of device coordinates */
+        icInt8Number[] prefix = new icInt8Number[32];     /* Prefix for each color name */
+        icInt8Number[] suffix = new icInt8Number[32];     /* Suffix for each color name */
+        icInt8Number[] data;    /* Named color data follows */
+
+        public icNamedColor2(uint vendorFlag, uint count, uint nDeviceCoords, sbyte[] prefix, sbyte[] suffix, sbyte[] data)
+        {
+            this.vendorFlag = vendorFlag;
+            this.count = count;
+            this.nDeviceCoords = nDeviceCoords;
+            this.prefix = prefix;
+            this.suffix = suffix;
+            this.data = data;
+        }
+
+        public icNamedColor2()
+        {
+        }
+
+        /**
+       *  Data that follows is of this form
+       *
+       *   icInt8Number         root1[32];              * Root name for first color
+       *   icUInt16Number       pcsCoords1[icAny];      * PCS coordinates of first color
+       *   icUInt16Number       deviceCoords1[icAny];   * Device coordinates of first color
+       *   icInt8Number         root2[32];              * Root name for second color
+       *   icUInt16Number       pcsCoords2[icAny];      * PCS coordinates of first color
+       *   icUInt16Number       deviceCoords2[icAny];   * Device coordinates of first color
+       *                      :
+       *                      :
+       *
+       * Alternatively written if byte packing is assumed with no padding between 
+       * structures then data can take the following form
+       *
+       *   icNamedColor2Entry  entry0; // Entry for first color
+       *   icNamedColor2Entry  entry1; // Entry for second color
+       *                      :
+       *                      :
+       * In either case repeat for name and PCS and device color coordinates up to (count-1)
+       * 
+       * NOTES:  
+       * PCS and device space can be determined from the header.
+       *
+       * PCS coordinates are icUInt16 numbers and are described in Annex A of 
+       * the ICC spec. Only 16 bit L*a*b* and XYZ are allowed. The number of 
+       * coordinates is consistent with the headers PCS.
+       *
+       * Device coordinates are icUInt16 numbers where 0x0000 represents
+       * the minimum value and 0xFFFF represents the maximum value. 
+       * If the nDeviceCoords value is 0 this field is not given.
+       */
+    }
+
+    /** Profile sequence structure */
+    public struct icDescStruct
+    {
+        icSignature deviceMfg;      /* Device Manufacturer */
+        icSignature deviceModel;    /* Decvice Model */
+        icUInt64Number attributes;     /* Device attributes */
+        icTechnologySignature technology;     /* Technology signature */
+        icInt8Number[] data;    /* Descriptions text follows */
+        /**
+       *  Data that follows is of this form, this is an icInt8Number
+       *  to avoid problems with a compiler generating  bad code as 
+       *  these arrays are variable in length.
+       *
+       * icTextDescription            deviceMfgDesc;  * Manufacturer text
+       * icTextDescription            modelDesc;      * Model text
+       */
+    }
+
+    /** Profile sequence description */
+    public struct icProfileSequenceDesc
+    {
+        icUInt32Number count;          /* Number of descriptions */
+        icUInt8Number[] data;    /* Array of description struct */
+    }
+
+
+    /** textDescription */
+    public struct icTextDescription
+    {
+        icUInt32Number count;          /* Description length */
+        icInt8Number[] data;    /* Descriptions follow */
+        /**
+       *  Data that follows is of this form
+       *
+       * icInt8Number         desc[count]     * NULL terminated ascii string
+       * icUInt32Number       ucLangCode;     * UniCode language code
+       * icUInt32Number       ucCount;        * UniCode description length
+       * icInt16Number        ucDesc[ucCount];* The UniCode description
+       * icUInt16Number       scCode;         * ScriptCode code
+       * icUInt8Number        scCount;        * ScriptCode count
+       * icInt8Number         scDesc[67];     * ScriptCode Description
+       */
+    }
+
+    /** Screening Data */
+    public struct icScreeningData
+    {
+        icS15Fixed16Number frequency;      /* Frequency */
+        icS15Fixed16Number angle;          /* Screen angle */
+        icSpotShape spotShape;      /* Spot Shape encodings below */
+    }
+
+
+    /** screening */
+    public struct icScreening
+    {
+        icUInt32Number screeningFlag;  /* Screening flag */
+        icUInt32Number channels;       /* Number of channels */
+        icScreeningData[] data;    /* Array of screening data */
+    }
+
+    /** Text Data */
+    public struct icText
+    {
+        icInt8Number[] data;    /* Variable array of characters */
+    }
+
+
+    /** Structure describing either a UCR or BG curve */
+    public struct icUcrBgCurve
+    {
+        icUInt32Number count;          /* Curve length */
+        icUInt16Number[] curve;   /* The array of curve values */
+    }
+
+    /** Under color removal, black generation */
+    public struct icUcrBg
+    {
+        icInt8Number[] data;    /* The Ucr BG data */
+        /**
+       *  Data that follows is of this form, this is a icInt8Number
+       *  to avoid problems with a compiler generating  bad code as 
+       *  these arrays are variable in length.
+       *
+       * icUcrBgCurve         ucr;            * Ucr curve
+       * icUcrBgCurve         bg;             * Bg curve
+       * icInt8Number         string;         * UcrBg description
+       */
+    }
+
+    /** viewingConditionsType */
+    public struct icViewingCondition
+    {
+        icXYZNumber illuminant;     /* In candelas per metre sq'd */
+        icXYZNumber surround;       /* In candelas per metre sq'd */
+        icIlluminant stdIluminant;   /* See icIlluminant defines */
+    }
+
+    /** CrdInfo type */
+    public struct icCrdInfo
+    {
+        icUInt32Number count;          /* Char count includes NULL */
+        icInt8Number[] desc;    /* Null terminated string */
+    }
+
+    /** ColorantOrder type */
+    public struct icColorantOrder
+    {
+        icUInt32Number count;          /* Count of colorants           */
+        icUInt8Number[] data;    /* One-based number of the 
+                                           colorant to be printed first,
+                                           second...                    */
+    }
+
+
+    /** ColorantTable Entry */
+    public struct icColorantTableEntry
+    {
+        icInt8Number[] name = new icInt8Number[32];       /* First colorant name              */
+        icUInt16Number[] data = new icUInt16Number[3];        /* 16 bit PCS Lab value for first   */
+
+        public icColorantTableEntry(sbyte[] name, ushort[] data)
+        {
+            this.name = name;
+            this.data = data;
+        }
+
+        public icColorantTableEntry()
+        {
+        }
+    }
+
+
+    /** ColorantTable */
+    public struct icColorantTable
+    {
+        icUInt32Number count;          /* Count of colorants           */
+        icColorantTableEntry[] entry;   /* N colorant entries           */
+    }
+
+    /**
+ * Tag Type definitions
+ */
+
+
+    /** The base part of each tag */
+    public struct icTagBase
+    {
+        icTagTypeSignature sig;            /* Signature */
+        icInt8Number[] reserved = new icInt8Number[4];    /* Reserved, set to 0 */
+
+        public icTagBase(icTagTypeSignature sig, icInt8Number[] reserved)
+        {
+            this.sig = sig;
+            this.reserved = reserved;
+        }
+
+        public icTagBase()
+        {
+        }
+    }
+
+
+    /** curveType */
+    public struct icCurveType
+    {
+        icTagBase tagbase;           /* Signature, "curv" */
+        icCurve curve;          /* The curve data */
+    }
+
+
+    /** ParametricCurveType */
+    public struct icParametricCurveType
+    {
+        icTagBase tagbase;           /* Signature, "para"        */
+        icParametricCurve curve;          /* The Parametric curve data*/
+    }
+
+
+    /** ParametricCurveFullType */
+    public struct icParametricCurveFullType
+    {
+        icTagBase tagbase;           /* Signature, "para"        */
+        icParametricCurveFull curve;        /* The Parametric curve data*/
+    }
+
+
+    /** dataType */
+    public struct icDataType
+    {
+        icTagBase tagbase;           /* Signature, "data" */
+        icData data;           /* The data structure */
+    }
+
+    /** dateTimeType */
+    public struct icDateTimeType
+    {
+        icTagBase tagbase;           /* Signature, "dtim" */
+        icDateTimeNumber date;           /* The date */
+    }
+
+
+    /** lut16Type */
+    public struct icLut16Type
+    {
+        icTagBase tagbase;           /* Signature, "mft2" */
+        icLut16 lut;            /* Lut16 data */
+    }
+
+
+    /** lut8Type, input & output tables are always 256 bytes in length */
+    public struct icLut8Type
+    {
+        icTagBase tagbase;           /* Signature, "mft1" */
+        icLut8 lut;            /* Lut8 data */
+    }
+
+
+    /** lutAtoBType new format */
+    public struct icLutAtoBType
+    {
+        icTagBase tagbase;           /* Signature, "mAB " */
+        icLutAtoB lut;            /* icLutAtoB data    */
+    }
+
+    /** lutBtoAType new format */
+    public struct icLutBtoAType
+    {
+        icTagBase tagbase;           /* Signature, "mBA " */
+        icLutBtoA lut;            /* icLutBtoA data    */
+    }
+
+
+    /** Measurement Type */
+    public struct icMeasurementType
+    {
+        icTagBase tagbase;           /* Signature, "meas" */
+        icMeasurement measurement;    /* Measurement data  */
+    }
+
+    /** icNamedColor2Type, replaces icNamedColorType */
+    public struct icNamedColor2Type
+    {
+        icTagBase tagbase;           /* Signature, "ncl2" */
+        icNamedColor2 ncolor;         /* Named color data  */
+    }
+
+    /** Profile sequence description type */
+    public struct icProfileSequenceDescType
+    {
+        icTagBase tagbase;       /* Signature, "pseq" */
+        icProfileSequenceDesc desc;       /* The seq description */
+    }
+
+
+    /** textDescriptionType */
+    public struct icTextDescriptionType
+    {
+        icTagBase tagbase;           /* Signature, "desc" */
+        icTextDescription desc;           /* The description */
+    }
+
+
+    /** s15Fixed16Type */
+    public struct icS15Fixed16ArrayType
+    {
+        icTagBase tagbase;           /* Signature, "sf32" */
+        icS15Fixed16Array data;           /* Array of values */
+    }
+
+
+    /** screeningType */
+    public struct icScreeningType
+    {
+        icTagBase tagbase;           /* Signature, "scrn" */
+        icScreening screen;         /* Screening structure */
+    }
+
+
+    /** sigType */
+    public struct icSignatureType
+    {
+        icTagBase tagbase;           /* Signature, "sig" */
+        icSignature signature;      /* The signature data */
+    }
+
+
+    /** textType */
+    public struct icTextType
+    {
+        icTagBase tagbase;           /* Signature, "text" */
+        icText data;           /* Variable array of characters */
+    }
+
+
+    /** u16Fixed16Type */
+    public struct icU16Fixed16ArrayType
+    {
+        icTagBase tagbase;           /* Signature, "uf32" */
+        icU16Fixed16Array data;           /* Variable array of values */
+    }
+
+    /** Under color removal, black generation type */
+    public struct icUcrBgType
+    {
+        icTagBase tagbase;           /* Signature, "bfd " */
+        icUcrBg data;           /* ucrBg structure */
+    }
+
+
+    /** uInt16Type */
+    public struct icUInt16ArrayType
+    {
+        icTagBase tagbase;           /* Signature, "ui16" */
+        icUInt16Array data;           /* Variable array of values */
+    }
+
+
+    /** uInt32Type */
+    public struct icUInt32ArrayType
+    {
+        icTagBase tagbase;           /* Signature, "ui32" */
+        icUInt32Array data;           /* Variable array of values */
+    }
+
+
+    /** uInt64Type */
+    public struct icUInt64ArrayType
+    {
+        icTagBase tagbase;           /* Signature, "ui64" */
+        icUInt64Array data;           /* Variable array of values */
+    }
+
+    /** uInt8Type */
+    public struct icUInt8ArrayType
+    {
+        icTagBase tagbase;           /* Signature, "ui08" */
+        icUInt8Array data;           /* Variable array of values */
+    }
+
+
+    /** viewingConditionsType */
+    public struct icViewingConditionType
+    {
+        icTagBase tagbase;           /* Signature, "view" */
+        icViewingCondition view;           /* Viewing conditions */
+    }
+
+
+    /** XYZ Type */
+    public struct icXYZType
+    {
+        icTagBase tagbase;           /* Signature, "XYZ" */
+        icXYZArray data;           /* Variable array of XYZ numbers */
+    }
+
+    /**
+ * CRDInfoType where [0] is the CRD product name count and string and
+ * [1] -[5] are the rendering intents 0-4 counts and strings
+ */
+    public struct icCrdInfoType
+    {
+        icTagBase tagbase;           /* Signature, "crdi" */
+        icCrdInfo info;           /* 5 sets of counts & strings */
+    }
+
+
+    /*   icCrdInfo       productName;     PS product count/string */
+    /*   icCrdInfo       CRDName0;        CRD name for intent 0 */
+    /*   icCrdInfo       CRDName1;        CRD name for intent 1 */
+    /*   icCrdInfo       CRDName2;        CRD name for intent 2 */
+    /*   icCrdInfo       CRDName3;        CRD name for intent 3 */
+
+    /** ColorantOrderType type */
+    public struct icColorantOrderType
+    {
+        icTagBase tagbase;           /* Signature, "clro" */
+        icColorantOrder order;          /* ColorantOrder     */
+    }
+
+
+    /** ColorantTableType type */
+    public struct icColorantTableType
+    {
+        icTagBase tagbase;           /* Signature, "clrt" */
+        icColorantTable table;          /* ColorantTable     */
+    }
+
+
+    /** ChromaticAdaptation type */
+    public struct icChromaticAdaptationType
+    {
+        icTagBase tagbase;           /* Signature, "chad"            */
+        icS15Fixed16Number[] matrix = new icS15Fixed16Number[9];      /* ChromaticAdaptation Matrix   */
+
+        public icChromaticAdaptationType(icTagBase tagbase, icS15Fixed16Number[] matrix)
+        {
+            this.tagbase = tagbase;
+            this.matrix = matrix;
+        }
+
+        public icChromaticAdaptationType()
+        {
+        }
+    }
+
+
+    /** MultiLocalizedUnicodeEntry type */
+    public struct icMultiLocalizedUnicodeEntry
+    {
+        icUInt16Number languageCode;   /* name language code ISO-639           */
+        icUInt16Number countryCode;    /* name country code ISO-3166           */
+        icUInt32Number len;            /* string length in bytes               */
+        icUInt32Number off;            /* offset in bytes from start of tag    */
+    }
+
+
+    /** MultiLocalizedUnicode type */
+    public struct icMultiLocalizedUnicodeType
+    {
+        icTagBase tagbase;           /* Signature, "mluc"            */
+        icUInt32Number count;          /* Count of name records        */
+        icUInt32Number size;           /* name record size             */
+    }
+
+    /*------------------------------------------------------------------------*/
+
+    /**
+    * Lists of tags, tags, profile header and profile structure
+     */
+
+    /** A tag */
+    public struct icTag
+    {
+        icTagSignature sig;            /* The tag signature */
+        icUInt32Number offset;         /* Start of tag relative to 
+                                         * start of header, Spec
+                                         * Clause 5 */
+        icUInt32Number size;           /* Size in bytes */
+    }
+
+
+    /** A Structure that may be used independently for a list of tags */
+    public struct icTagList
+    {
+        icUInt32Number count;          /* Number of tags in the profile */
+        icTag[] tags;    /* Variable array of tags */
+    }
+
+#if PORT
+
+    /** Profile ID */
+    typedef union {
+    icUInt8Number         ID8[16];
+    icUInt16Number        ID16[8];
+    icUInt32Number        ID32[4];
+} icProfileID;
+#endif
+
+    public struct icProfileID
+    {
+        icUInt32Number[] ID32;
+    }
+
+    /** The Profile header */
+    public struct icHeader
+    {
+        icUInt32Number size;             /* Profile size in bytes */
+        icSignature cmmId;            /* CMM for this profile */
+        icUInt32Number version;          /* Format version number */
+        icProfileClassSignature deviceClass;      /* Type of profile */
+        icColorSpaceSignature colorSpace;       /* Color space of data */
+        icColorSpaceSignature pcs;              /* PCS, XYZ or Lab only */
+        icDateTimeNumber date;             /* Date profile was created */
+        icSignature magic;            /* icMagicNumber */
+        icPlatformSignature platform;         /* Primary Platform */
+        icUInt32Number flags;            /* Various bit settings */
+        icSignature manufacturer;     /* Device manufacturer */
+        icUInt32Number model;            /* Device model number */
+        icUInt64Number attributes;       /* Device attributes */
+        icUInt32Number renderingIntent;  /* Rendering intent */
+        icXYZNumber illuminant;       /* Profile illuminant */
+        icSignature creator;          /* Profile creator */
+        icProfileID profileID;        /* Profile ID using RFC 1321 MD5 128bit fingerprinting */
+        /*Fields New for V5*/
+        icSpectralColorSignature spectralPCS;      /* Spectral colour space signature */
+        icSpectralRange spectralRange;    /* Start, end, and steps for spectral PCS */
+        icSpectralRange biSpectralRange;  /* Start, end, and steps for bi-spectral PCS */
+        icMaterialColorSignature mcs;              /* Material Connection Space */
+        icSignature deviceSubClass;   /* Refinement on type of profile */
+        //TODO(PORT) reserved[4]
+        icInt8Number[] reserved;    /* Reserved for future use */
+    }
+
+    /** 
+ * A profile, 
+ * we can't use icTagList here because its not at the end of the structure
+ */
+    public struct icProfile
+    {
+        icHeader header;         /* The header */
+        icTagList tagList;        /* with tagList */
+        /* Original:
+        icHeader            header;             The header 
+        icUInt32Number      count;              Number of tags in the profile 
+        icInt8Number        data[icAny];        The tagTable and tagData */
+        /*
+         * Data that follows is of the form
+         *
+         * icTag        tagTable[icAny];        * The tag table 
+         * icInt8Number tagData[icAny];         * The tag data 
+         */
+    }
+
+    /*------------------------------------------------------------------------*/
+    /* Obsolete entries */
+
+    /* icNamedColor was replaced with icNamedColor2 *
+    typedef struct {
+        icUInt32Number      vendorFlag;     / Bottom 16 bits for IC use *
+        icUInt32Number      count;          / Count of named colors *
+        icInt8Number        data[icAny];    / Named color data follows *
+     *
+     *  Data that follows is of this form
+     *
+     * icInt8Number         prefix[icAny];      * Prefix for the color name, max = 32
+     * icInt8Number         suffix[icAny];      * Suffix for the color name, max = 32
+     * icInt8Number         root1[icAny];       * Root name for first color, max = 32
+     * icInt8Number         coords1[icAny];     * Color coordinates of first color
+     * icInt8Number         root2[icAny];       * Root name for first color, max = 32
+     * icInt8Number         coords2[icAny];     * Color coordinates of first color
+     *                      :
+     *                      :
+     * Repeat for root name and color coordinates up to (count-1)
+     *
+    } icNamedColor; */
+
+    /* icNamedColorType was replaced by icNamedColor2Type *
+    typedef struct {
+        icTagBase           base;           / Signature, "ncol" *
+        icNamedColor        ncolor;         / Named color data *
+    } icNamedColorType; */
 
     public static class Global
     {
