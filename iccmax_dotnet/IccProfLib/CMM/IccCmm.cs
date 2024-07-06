@@ -158,22 +158,7 @@ namespace iccmax_dotnet.IccProfLib.CMM
 }
 
 
-/**
-**************************************************************************
-* Type: Class
-*
-* Purpose:
-*  Hint for getting CMM environment variable values
-**************************************************************************
-*
-class ICCPROFLIB_API CIccCreateCmmPccEnvVarXformHint: public IIccCreateXformHint
-{
-public:
-  virtual ~CIccCreateCmmPccEnvVarXformHint() { }
 
-  virtual const char* GetHintType() const { return "CIccCreateCmmPccEnvVarXformHint"; }
-  virtual IIccCmmEnvVarLookup* GetNewCmmEnvVarLookup() const = 0;
-};
 
 
 /**

@@ -48,9 +48,21 @@ global using icU16Fixed16Number = uint;
 global using icFloat16Number = System.Half;
 global using icFloat32Number = float;
 global using icFloat64Number = double;
+global using icFloatNumber = float;
 
 /** 16-bit unicode characters **/
 global using icUnicodeChar = ushort;
+
+//Definitions used for conversion of fixed floating point numbers
+global using icU1Fixed15Number = ushort;
+global using icU8Fixed8Number = ushort;
+
+
+/* For string operations */
+global using icChar = char;
+global using icUChar = char; /*For Utf8 encoding*/
+global using icUChar16 = char; /*For Utf16 encoding*/
+global using icWChar = char;
 
 /**
  * MPE Future Extension Acs signature
@@ -1974,6 +1986,16 @@ namespace RefIccMax.IccProfLib
         icNamedColor        ncolor;         / Named color data *
     } icNamedColorType; */
 
+    //From IccDefs
+    /* Validation Status values */
+    public enum icValidateStatus
+    {
+        icValidateOK,              /*Profile is valid and conforms to specification*/
+        icValidateWarning,         /*Profile conforms to specification with concerns*/
+        icValidateNonCompliant,    /*Profile does not conform to specification, but may still be useable*/
+        icValidateCriticalError,   /*Profile does not conform to specification and is not useable*/
+    }
+    
     public static class Global
     {
         /** 
@@ -2049,12 +2071,29 @@ namespace RefIccMax.IccProfLib
         public const ushort icRange700nm = 0x6178;
         public const ushort icRange780nm = 0x6218;
 
-        //From IccUtil.h
+        /**
+* Additional convenience color space signatures to distinguish between device
+* encoding and PCS encoding.
+*
+* Device encoding of these color spaces is left to the device to define.
+*/
+        public const icColorSpaceSignature icSigDevLabData  = ((icColorSpaceSignature)0x644C6162);  /* 'dLab' */
+        public const icColorSpaceSignature icSigDevXYZData = ((icColorSpaceSignature)0x6458595A);  /* 'dXYZ' */
+
+        
+
+
+        //From IccUtil
         public const double icPiNum = 3.14159265358979323846;
+        public const double PI = 3.1415926535897932384626433832795;
         public const double icPosInfinity = Double.PositiveInfinity;
         public const double icNegInfinity = Double.NegativeInfinity;
         public const double icNotANumber = Double.NaN;
-        public static bool icNotZero(double v) { return ((v)>1.0e-8 || (v)<-1.0e-8); }
+        public static bool icNotZero(double v) { return ((v) > 1.0e-8 || (v) < -1.0e-8); }
+        public const string icMsgValidateWarning = "Warning! - ";
+        public const string icMsgValidateNonCompliant = "NonCompliant! - ";
+        public const string icMsgValidateCriticalError = "Error! - ";
+        public const string icMsgValidateInformation = "Information - ";
 
 
         //TODO can these be moved to their respective enums?

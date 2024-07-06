@@ -80,14 +80,75 @@ namespace iccmax_dotnet.IccProfLib
 #if PORT
 
         ICCPROFLIB_API void* icRealloc(void* ptr, size_t size);
+#endif
 
+    public static class Util
+    {
+        public static bool icIsNear(icFloatNumber v1, icFloatNumber v2, icFloatNumber nearRange = 1.0e-8f)
+        {
+            return Math.Abs(v1 - v2) <= nearRange;
+        }
 
-        ICCPROFLIB_API bool icIsNear(icFloatNumber v1, icFloatNumber v2, icFloatNumber nearRange = 1.0e-8);
+        public static double icRoundOffset(double v)
+        {
+            if (v < 0.0)
+                return v - 0.5;
+            else
+                return v + 0.5;
+        }
 
-        ICCPROFLIB_API double icRoundOffset(double v);
+        public static icValidateStatus icMaxStatus(icValidateStatus s1, icValidateStatus s2)
+        {
+            return s1 > s2 ? s1 : s2;
+        }
 
-        ICCPROFLIB_API icValidateStatus icMaxStatus(icValidateStatus s1, icValidateStatus s2);
-        ICCPROFLIB_API bool icIsSpaceCLR(icColorSpaceSignature sig);
+        static icInt32Number icHexDigit(icChar digit)
+        {
+            if (digit >= '0' && digit <= '9')
+                return digit - '0';
+            if (digit >= 'A' && digit <= 'F')
+                return digit - 'A' + 10;
+            /*  if (digit>='a' && digit<='f')
+                return digit-'a'+10;*/
+            return -1;
+        }
+
+        public static bool icIsSpaceCLR(icColorSpaceSignature sig)
+        {
+            icChar[] szSig = new icChar[5];
+            szSig[0] = (icChar)((uint)sig >> 24);
+            szSig[1] = (icChar)((uint)sig >> 16);
+            szSig[2] = (icChar)((uint)sig >> 8);
+            szSig[3] = (icChar)((uint)sig);
+            szSig[4] = '\0';
+
+            icInt32Number d0 = icHexDigit(szSig[0]);
+
+            if (szSig[0] == 'n' && szSig[1] == 'c')
+                return true;
+            else if (new string(szSig.Skip(1).Take(3).ToArray()) == "CLR")
+            {
+                 d0 = icHexDigit(szSig[0]);
+                if (d0 >= 1)
+                    return true;
+            }
+            else if (new string(szSig).Substring(2, 2) == "CL")
+            {
+                d0 = icHexDigit(szSig[0]);
+                icInt32Number d1 = icHexDigit(szSig[1]);
+
+                if (d0 >= 0 && d1 >= 0)
+                {
+                    icInt32Number n = (d0 << 4) + d1;
+
+                    if (n > 0xf)
+                        return true;
+                }
+            }
+            return false;
+        }
+
+#if PORT
 
         ICCPROFLIB_API void icColorIndexName(icChar* szName, icColorSpaceSignature csSig,
                               int nIndex, int nColors, const icChar* szUnknown);
@@ -179,7 +240,7 @@ ICCPROFLIB_API void icNormXYZ(icFloatNumber* XYZ, icFloatNumber* WhiteXYZ = NULL
         ICCPROFLIB_API const icChar* icGetColorSig(icChar * pBuf, icUInt32Number sig, bool bGetHexVal = true);
         ICCPROFLIB_API const icChar* icGetColorSigStr(icChar * pBuf, icUInt32Number nSig);
 
-#define icUtf8StrCmp(x, y) strcmp((const char*)x, (const char*)y)
+//#define icUtf8StrCmp(x, y) strcmp((const char*)x, (const char*)y)
 
         ICCPROFLIB_API std::string icGetSigPath(icUInt32Number sig);
         ICCPROFLIB_API icSignature icGetFirstSigPathSig(std::string sigPath);
@@ -200,7 +261,7 @@ ICCPROFLIB_API void icNormXYZ(icFloatNumber* XYZ, icFloatNumber* WhiteXYZ = NULL
         ICCPROFLIB_API extern const char* icMsgValidateCriticalError;
         ICCPROFLIB_API extern const char* icMsgValidateInformation;
 
-# ifdef ICC_BYTE_ORDER_LITTLE_ENDIAN
+//# ifdef ICC_BYTE_ORDER_LITTLE_ENDIAN
         inline void icSwab16Ptr(void* pVoid)
         {
             icUInt8Number* ptr = (icUInt8Number*)pVoid;
@@ -273,18 +334,18 @@ ICCPROFLIB_API void icNormXYZ(icFloatNumber* XYZ, icFloatNumber* WhiteXYZ = NULL
             }
 
         }
-/else //!ICC_BYTE_ORDER_LITTLE_ENDIAN
-#define icSwab16Ptr(flt)
-#define icSwab16Array(flt, n)
-#define icSwab32Ptr(flt)
-#define icSwab32Array(flt, n)
-#define icSwab64Ptr(flt)
-#define icSwab64Array(flt, n)
+//else //!ICC_BYTE_ORDER_LITTLE_ENDIAN
+//#define icSwab16Ptr(flt)
+//#define icSwab16Array(flt, n)
+/#define icSwab32Ptr(flt)
+/#define icSwab32Array(flt, n)
+/#define icSwab64Ptr(flt)
+/#define icSwab64Array(flt, n)
 //endif
 
-#define icSwab16(flt) icSwab16Ptr(&flt)
-#define icSwab32(flt) icSwab32Ptr(&flt)
-#define icSwab64(flt) icSwab64Ptr(&flt)
+/#define icSwab16(flt) icSwab16Ptr(&flt)
+/#define icSwab32(flt) icSwab32Ptr(&flt)
+/#define icSwab64(flt) icSwab64Ptr(&flt)
 
 
         /**
@@ -367,7 +428,7 @@ public:
      *  is less thatn icDefaultPixelBufSize
      **************************************************************************
      */
-#define icDefaultPixelBufSize 100
+/#define icDefaultPixelBufSize 100
     class ICCPROFLIB_API CIccPixelBuf
 {
 public:
@@ -389,28 +450,14 @@ public:
 
 
 
-/**
-**************************************************************************
-* Type: Class
-* 
-* Purpose: 
-*  Interface for performing Cmm Environment Variable Lookup
-**************************************************************************
-*/
-class ICCPROFLIB_API IIccCmmEnvVarLookup
-{
-public:
-  virtual ~IIccCmmEnvVarLookup() { }
-
-virtual bool GetEnvVar(icSigCmmEnvVar sig, icFloatNumber &val)= 0;
-virtual bool IndexedEnvVar(icUInt32Number nIndex, icSigCmmEnvVar &sig, icFloatNumber &val)= 0;
-};
-
-
-
-
-
 #endif
 
+
+
+
+
+
+
+    }
 
 }
