@@ -1129,9 +1129,9 @@ namespace RefIccMax.IccProfLib
     /** XYZ Number  */
     public struct icXYZNumber
     {
-        icS15Fixed16Number X;
-        icS15Fixed16Number Y;
-        icS15Fixed16Number Z;
+        public icS15Fixed16Number X;
+        public icS15Fixed16Number Y;
+        public icS15Fixed16Number Z;
     }
 
 
@@ -2126,7 +2126,7 @@ namespace RefIccMax.IccProfLib
         public const icColorSpaceSignature icSigGamutData = ((icColorSpaceSignature)0x67616D74);  /* 'gamt' */
         public const icColorSpaceSignature icSigBRDFParameters = ((icColorSpaceSignature)0x62700000);  /* "bp0000" */
         public const icColorSpaceSignature icSigBRDFDirect = ((icColorSpaceSignature)0x62640000);  /* "bd0000" */
-        public const icColorSpaceSignature icColorSpaceSignatureicSigUnknownData = ((icColorSpaceSignature)0x3f3f3f3f);  /* '????' */
+        public const icColorSpaceSignature icSigUnknownData = ((icColorSpaceSignature)0x3f3f3f3f);  /* '????' */
         public const icColorSpaceSignature icMaxEnumData = ((icColorSpaceSignature)0xFFFFFFFF);
         public const icProfileClassSignature icMaxEnumClass = ((icProfileClassSignature)0xFFFFFFFF);
         public const icPlatformSignature icMaxEnumPlatform = ((icPlatformSignature)0xFFFFFFFF);

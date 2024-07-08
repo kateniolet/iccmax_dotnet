@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace iccmax_dotnet.IccProfLib
 {
@@ -128,7 +129,7 @@ namespace iccmax_dotnet.IccProfLib
                 return true;
             else if (new string(szSig.Skip(1).Take(3).ToArray()) == "CLR")
             {
-                 d0 = icHexDigit(szSig[0]);
+                d0 = icHexDigit(szSig[0]);
                 if (d0 >= 1)
                     return true;
             }
@@ -148,37 +149,496 @@ namespace iccmax_dotnet.IccProfLib
             return false;
         }
 
+
+        public static void icColorIndexName(out icChar[] szName, icColorSpaceSignature csSig,
+                              int nIndex, int nColors, icChar[] szUnknown)
+        {
+            icChar[] szSig = new icChar[5];
+            int i;
+
+            if (csSig != Global.icSigUnknownData)
+            {
+                szSig[0] = (icChar)((uint)csSig >> 24);
+                szSig[1] = (icChar)((uint)csSig >> 16);
+                szSig[2] = (icChar)((uint)csSig >> 8);
+                szSig[3] = (icChar)((uint)csSig);
+                szSig[4] = '\0';
+
+                for (i = 3; i > 0; i--)
+                {
+                    if (szSig[i] == ' ')
+                        szSig[i] = '\0';
+                }
+                if (nColors == 1)
+                {
+                    szName = szSig;
+                }
+                else if (nColors == new string(szSig).Length)
+                {
+                    string name = "%s_%c";
+                    string.Format(name, szSig, szSig[nIndex]);
+                    szName = name.ToCharArray();
+                }
+                else
+                {
+                    string name = "%s_%d";
+                    string.Format(name, szSig, nIndex + 1);
+                    szName = name.ToCharArray();
+                }
+            }
+            else if (nColors == 1)
+            {
+                szName = szUnknown;
+            }
+            else
+            {
+                string name = "%s_%d";
+                string.Format(name, szUnknown, nIndex + 1);
+                szName = name.ToCharArray();
+            }
+        }
+
+
+        public static void icColorValue(out icChar[] szValue, icFloatNumber nValue,
+                                  icColorSpaceSignature csSig, int nIndex, bool bUseLegacy = false)
+        {
+            if (csSig == icColorSpaceSignature.icSigLabData)
+            {
+                if (!bUseLegacy)
+                {
+                    if (nIndex == 0 || nIndex > 2)
+                    {
+                        string value = "%7.3lf";
+                        string.Format(value, nValue * 100.0);
+                        szValue = value.ToCharArray();
+                    }
+                    else
+                    {
+                        string value = "%8.3lf";
+                        string.Format(value, nValue * 255.0 - 128.0);
+                        szValue = value.ToCharArray();
+                    }
+                }
+                else
+                {
+                    if (nIndex == 0 || nIndex > 2)
+                    {
+                        string value = "%7.3lf";
+                        string.Format(value, nValue * 100.0 * 65535.0 / 65280.0);
+                        szValue = value.ToCharArray();
+                    }
+                    else
+                    {
+
+                        string value = "%8.3lf";
+                        string.Format(value, nValue * 255.0 * 65535.0 / 65280.0 - 128.0);
+                        szValue = value.ToCharArray();
+                    }
+                }
+            }
+            else if (csSig == Global.icSigUnknownData)
+            {
+                string value = "%8.3lf";
+                string.Format(value, nValue);
+                szValue = value.ToCharArray();
+
+            }
+            else
+            {
+                if (nIndex == 0 || nIndex > 2)
+                {
+                    string value = "%8.3lf";
+                    string.Format(value, nValue);
+                    szValue = value.ToCharArray();
+                }
+                else
+                {
+                    string value = "%8.3lf";
+                    string.Format(value, nValue * 100.0);
+                    szValue = value.ToCharArray();
+                }
+            }
+        }
+
+        public static icFloatNumber icFtoD(icS15Fixed16Number num)
+        {
+            icFloatNumber rv = (icFloatNumber)((double)num / 65536.0);
+
+            return rv;
+        }
+
+        public static icS15Fixed16Number icDtoF(icFloatNumber num)
+        {
+            icS15Fixed16Number rv;
+
+            if (num < -32768.0f)
+                num = -32768.0f;
+            else if (num > 32767.0f)
+                num = 32767.0f;
+
+            rv = (icS15Fixed16Number)icRoundOffset((double)num * 65536.0);
+
+            return rv;
+        }
+
+        public static icU16Fixed16Number icDtoUF(icFloatNumber num)
+        {
+            icU16Fixed16Number rv;
+
+            if (num < 0)
+                num = 0;
+            else if (num > 65535.0f)
+                num = 65535.0f;
+
+            rv = (icU16Fixed16Number)icRoundOffset((double)num * 65536.0);
+
+            return rv;
+        }
+
+        public static icFloatNumber icUFtoD(icU16Fixed16Number num)
+        {
+            icFloatNumber rv = (icFloatNumber)((double)num / 65536.0);
+
+            return rv;
+        }
+
+        public static icU1Fixed15Number icDtoUSF(icFloatNumber num)
+        {
+            icU1Fixed15Number rv;
+
+            if (num < 0f)
+                num = 0f;
+            else if (num > 65535.0f / 32768.0f)
+                num = 65535.0f / 32768.0f;
+
+            rv = (icU1Fixed15Number)icRoundOffset(num * 32768.0f);
+
+            return rv;
+        }
+
+        public static icFloatNumber icUSFtoD(icU1Fixed15Number num)
+        {
+            icFloatNumber rv = (icFloatNumber)((icFloatNumber)num / 32768.0f);
+
+            return rv;
+        }
+
+        public static icU8Fixed8Number icDtoUCF(icFloatNumber num)
+        {
+            icU8Fixed8Number rv;
+
+            if (num < 0f)
+                num = 0f;
+            else if (num > 255.0f)
+                num = 255.0f;
+
+            rv = (icU8Fixed8Number)icRoundOffset(num * 256.0f);
+
+            return rv;
+        }
+
+        public static icFloatNumber icUCFtoD(icU8Fixed8Number num)
+        {
+            icFloatNumber rv = (icFloatNumber)((icFloatNumber)num / 256.0f);
+
+            return rv;
+        }
+
+        public static bool icIsS15Fixed16NumberNear(icS15Fixed16Number F, icFloatNumber D)
+        {
+            icFloatNumber v = icFtoD(F);
+
+            return (icUInt32Number)(F * 10000.0f + 0.5) == (icUInt32Number)(D * 10000.0f + 0.5);
+        }
+
+        public static bool icIsIllumD50(icXYZNumber xyz)
+        {
+            return icIsS15Fixed16NumberNear(xyz.X, 0.9642f) &&
+                   icIsS15Fixed16NumberNear(xyz.Y, 1.0000f) &&
+                   icIsS15Fixed16NumberNear(xyz.Z, 0.8249f);
+        }
+
+        /**
+        **************************************************************************
+        * Name: icMatrixInvert3x3
+        * 
+        * Purpose: 
+        *  Inversion of a 3x3 matrix using the Adjoint Cofactor and the determinant of
+        *  the 3x3 matrix.
+        *
+        *  Note: Matrix index positions:
+        *     0 1 2
+        *     3 4 5
+        *     6 7 8
+        * 
+        * Args: 
+        *  M = matrix to invert.
+        * 
+        * Return: 
+        *  true = matrix is invertible and stored back into M, false = matrix is not
+        *  invertible.
+        **************************************************************************
+*/
+        public static bool icMatrixInvert3x3(ref icFloatNumber[] M)
+        {
+            const icFloatNumber epsilon = 1e-8f;
+
+            icFloatNumber m48 = M[4] * M[8];
+            icFloatNumber m75 = M[7] * M[5];
+            icFloatNumber m38 = M[3] * M[8];
+            icFloatNumber m65 = M[6] * M[5];
+            icFloatNumber m37 = M[3] * M[7];
+            icFloatNumber m64 = M[6] * M[4];
+
+            icFloatNumber det = M[0] * (m48 - m75) -
+              M[1] * (m38 - m65) +
+              M[2] * (m37 - m64);
+
+            if (det > -epsilon && det < epsilon)
+                return false;
+
+            icFloatNumber[] Co = new icFloatNumber[9];
+
+            Co[0] = +(m48 - m75);
+            Co[1] = -(m38 - m65);
+            Co[2] = +(m37 - m64);
+
+            Co[3] = -(M[1] * M[8] - M[7] * M[2]);
+            Co[4] = +(M[0] * M[8] - M[6] * M[2]);
+            Co[5] = -(M[0] * M[7] - M[6] * M[1]);
+
+            Co[6] = +(M[1] * M[5] - M[4] * M[2]);
+            Co[7] = -(M[0] * M[5] - M[3] * M[2]);
+            Co[8] = +(M[0] * M[4] - M[3] * M[1]);
+
+            M[0] = Co[0] / det;
+            M[1] = Co[3] / det;
+            M[2] = Co[6] / det;
+
+            M[3] = Co[1] / det;
+            M[4] = Co[4] / det;
+            M[5] = Co[7] / det;
+
+            M[6] = Co[2] / det;
+            M[7] = Co[5] / det;
+            M[8] = Co[8] / det;
+
+            return true;
+        }
+
+        /**
+        **************************************************************************
+        * Name: icMatrixMultiply3x3
+        * 
+        * Purpose: 
+        *  Multiply two 3x3 matricies resulting in a 3x3 matrix.
+        *
+        *  Note: Matrix index positions:
+        *     0 1 2
+        *     3 4 5
+        *     6 7 8
+        * 
+        * Args: 
+        *  result = matrix to recieve result.
+        *  l = left matrix to multiply (matrix multiplication is order dependent)
+        *  r = right matrix to multiply (matrix multiplicaiton is order dependent)
+        *
+        **************************************************************************
+*/
+        public static void icMatrixMultiply3x3(out icFloatNumber[] result,
+                                 icFloatNumber[] l,
+                                icFloatNumber[] r)
+        {
+            const uint e11 = 0;
+            const uint e12 = 1;
+            const uint e13 = 2;
+            const uint e21 = 3;
+            const uint e22 = 4;
+            const uint e23 = 5;
+            const uint e31 = 6;
+            const uint e32 = 7;
+            const uint e33 = 8;
+
+            result = new icFloatNumber[9];
+
+            result[e11] = l[e11] * r[e11] + l[e12] * r[e21] + l[e13] * r[e31];
+            result[e12] = l[e11] * r[e12] + l[e12] * r[e22] + l[e13] * r[e32];
+            result[e13] = l[e11] * r[e13] + l[e12] * r[e23] + l[e13] * r[e33];
+            result[e21] = l[e21] * r[e11] + l[e22] * r[e21] + l[e23] * r[e31];
+            result[e22] = l[e21] * r[e12] + l[e22] * r[e22] + l[e23] * r[e32];
+            result[e23] = l[e21] * r[e13] + l[e22] * r[e23] + l[e23] * r[e33];
+            result[e31] = l[e31] * r[e11] + l[e32] * r[e21] + l[e33] * r[e31];
+            result[e32] = l[e31] * r[e12] + l[e32] * r[e22] + l[e33] * r[e32];
+            result[e33] = l[e31] * r[e13] + l[e32] * r[e23] + l[e33] * r[e33];
+        }
+
+        /**
+**************************************************************************
+* Name: icVectorApplyMatrix3x3
+* 
+* Purpose: 
+*  Applies a 3x3 matrix to a 3 element column vector. 
+*
+*  Note: Matrix index positions:
+*     0 1 2
+*     3 4 5
+*     6 7 8
+* 
+*  Note: result = m x v
+*
+* Args: 
+*  result = vector to receive result.
+*  m = matrix to multiply
+*  v = vector to apply matrix to
+*
+**************************************************************************
+*/
+        public static void icVectorApplyMatrix3x3(out icFloatNumber[] result,
+                            icFloatNumber[] m,
+                            icFloatNumber[] v)
+        {
+            const uint e11 = 0;
+            const uint e12 = 1;
+            const uint e13 = 2;
+            const uint e21 = 3;
+            const uint e22 = 4;
+            const uint e23 = 5;
+            const uint e31 = 6;
+            const uint e32 = 7;
+            const uint e33 = 8;
+            result = new icFloatNumber[3];
+            result[0] = m[e11] * v[0] + m[e12] * v[1] + m[e13] * v[2];
+            result[1] = m[e21] * v[0] + m[e22] * v[1] + m[e23] * v[2];
+            result[2] = m[e31] * v[0] + m[e32] * v[1] + m[e33] * v[2];
+        }
+
+        public static icFloatNumber icF16toF(icFloat16Number num)
+        {
+            icUInt16Number numsgn, numexp, nummnt;
+            icUInt32Number rv, rvsgn, rvexp, rvmnt;
+            icInt32Number tmpexp;
+            icFloatNumber rvfp, rvf;
+            int exp;
+
+            if (((uint)num & (uint)0x7FFF) == 0)
+            {
+                rv = ((icUInt32Number)num) << 16;
+            }
+            else
+            {
+                numsgn = (ushort)((ushort)num & (ushort)0x8000);
+                numexp = (ushort)((ushort)num & (ushort)0x7C00);
+                nummnt = (ushort)((ushort)num & (ushort)0x03FF);
+                if (numexp == 0)
+                {
+                    exp = -1;
+                    do
+                    {
+                        exp++;
+                        nummnt <<= 1;
+                    } while ((nummnt & 0x0400) == 0); // Shift until leading bit overflows into exponent bit
+                    rvsgn = ((icUInt32Number)numsgn) << 16;
+                    tmpexp = (int)(((icUInt32Number)(numexp >> 10)) - 15 + 127 - exp);
+                    rvexp = (icUInt32Number)(tmpexp << 23);
+                    rvmnt = ((icUInt32Number)(nummnt & 0x03FFu)) << 13;
+                    rv = (rvsgn | rvexp | rvmnt);
+                }
+                else if (numexp == 0x7C00)
+                {
+                    if (nummnt == 0)
+                    {
+                        rv = (((icUInt32Number)numsgn) << 16) | ((icUInt32Number)0x7F800000);
+                    }
+                    else
+                    {
+                        rv = (icUInt32Number)0xFFC00000;
+                    }
+                }
+                else
+                {
+                    rvsgn = ((icUInt32Number)numsgn) << 16;
+                    tmpexp = (int)(((icUInt32Number)(numexp >> 10)) - 15 + 127);
+                    rvexp = (icUInt32Number)(tmpexp << 23);
+                    rvmnt = ((icUInt32Number)nummnt) << 13;
+                    rv = (rvsgn | rvexp | rvmnt);
+                }
+            }
+            rvfp = (icFloatNumber)rv;
+            rvf = rvfp;
+            return rvf;
+        }
+
 #if PORT
+        icFloat16Number ICCPROFLIB_API icFtoF16(icFloat32Number num)
+        {
+            icUInt16Number rv;
+            icUInt16Number rvsgn, rvexp, rvmnt;
+            icUInt32Number flt, *fltp, fltsgn, fltexp, fltmnt;
+            int exp;
 
-        ICCPROFLIB_API void icColorIndexName(icChar* szName, icColorSpaceSignature csSig,
-                              int nIndex, int nColors, const icChar* szUnknown);
-        ICCPROFLIB_API void icColorValue(icChar* szValue, icFloatNumber nValue,
-                          icColorSpaceSignature csSig, int nIndex, bool bUseLegacy = false);
+            fltp = (icUInt32Number*)&num;
+            flt = *fltp;
+            if (!(flt & 0x7FFFFFFF))
+            {
+                rv = (icUInt16Number)(flt >> 16);
+            }
+            else
+            {
+                fltsgn = flt & 0x80000000;
+                fltexp = flt & 0x7F800000;
+                fltmnt = flt & 0x007FFFFF;
+                if (!fltexp)
+                {
+                    rv = (icUInt16Number)(fltsgn >> 16);
+                }
+                else if (fltexp == 0x7F800000)
+                {
+                    if (!fltmnt)
+                    {
+                        rv = (icUInt16Number)((fltsgn >> 16) | 0x7C00); // Signed Inf
+                    }
+                    else
+                    {
+                        rv = (icUInt16Number)0xFE00; // NaN
+                    }
+                }
+                else
+                { // Normalized number
+                    rvsgn = (icUInt16Number)(fltsgn >> 16);
+                    exp = ((int)(fltexp >> 23)) - 127 + 15;
+                    if (exp >= 0x1F)
+                    {  // Overflow
+                        rv = (icUInt16Number)((fltsgn >> 16) | 0x7C00); // Signed Inf
+                    }
+                    else if (exp <= 0)
+                    {  // Underflow
+                        if ((14 - exp) > 24)
+                        {
+                            rvmnt = (icUInt16Number)0;  // Set mantissa to zero
+                        }
+                        else
+                        {
+                            fltmnt |= 0x00800000;  // Include hidden leading bit
+                            rvmnt = (icUInt16Number)(fltmnt >> (14 - exp));
+                            if ((fltmnt >> (13 - exp)) & 0x00000001) // Rounding?
+                                rvmnt += (icUInt16Number)1;
+                        }
+                        rv = (rvsgn | rvmnt);
+                    }
+                    else
+                    {
+                        rvexp = (icUInt16Number)(exp << 10);
+                        rvmnt = (icUInt16Number)(fltmnt >> 13);
+                        if (fltmnt & 0x00001000) // Rounding?
+                            rv = (rvsgn | rvexp | rvmnt) + (icUInt16Number)1;
+                        else
+                            rv = (rvsgn | rvexp | rvmnt);
+                    }
+                }
+            }
+            return rv;
+        }
 
-        ICCPROFLIB_API bool icIsIllumD50(icXYZNumber xyz);
-
-        ICCPROFLIB_API bool icMatrixInvert3x3(icFloatNumber* matrix);
-        ICCPROFLIB_API void icMatrixMultiply3x3(icFloatNumber* result,
-                                                const icFloatNumber* l,
-                                                const icFloatNumber* r);
-        ICCPROFLIB_API void icVectorApplyMatrix3x3(icFloatNumber* result,
-                                                   const icFloatNumber* m,
-                                                   const icFloatNumber* v);
-
-        ICCPROFLIB_API icS15Fixed16Number icDtoF(icFloatNumber num);
-        ICCPROFLIB_API icFloatNumber icFtoD(icS15Fixed16Number num);
-
-        ICCPROFLIB_API icU16Fixed16Number icDtoUF(icFloatNumber num);
-        ICCPROFLIB_API icFloatNumber icUFtoD(icU16Fixed16Number num);
-
-        ICCPROFLIB_API icU1Fixed15Number icDtoUSF(icFloatNumber num);
-        ICCPROFLIB_API icFloatNumber icUSFtoD(icU1Fixed15Number num);
-
-        ICCPROFLIB_API icU8Fixed8Number icDtoUCF(icFloatNumber num);
-        ICCPROFLIB_API icFloatNumber icUCFtoD(icU8Fixed8Number num);
-
-        ICCPROFLIB_API icFloat32Number icF16toF(icFloat16Number num);
-        ICCPROFLIB_API icFloat16Number icFtoF16(icFloat32Number num);
 
         /*0 to 255 <-> 0.0 to 1.0*/
         ICCPROFLIB_API icUInt8Number icFtoU8(icFloatNumber num);
