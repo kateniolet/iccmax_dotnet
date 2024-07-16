@@ -512,6 +512,7 @@ namespace iccmax_dotnet.IccProfLib
             result[2] = m[e31] * v[0] + m[e32] * v[1] + m[e33] * v[2];
         }
 
+        //TODO Port can we do this natively?
         public static icFloatNumber icF16toF(icFloat16Number num)
         {
             icUInt16Number numsgn, numexp, nummnt;
@@ -568,17 +569,17 @@ namespace iccmax_dotnet.IccProfLib
             return rvf;
         }
 
-#if PORT
-        icFloat16Number ICCPROFLIB_API icFtoF16(icFloat32Number num)
+        //TODO Port can we do this natively?
+        public static icFloat16Number icFtoF16(icFloat32Number num)
         {
             icUInt16Number rv;
             icUInt16Number rvsgn, rvexp, rvmnt;
-            icUInt32Number flt, *fltp, fltsgn, fltexp, fltmnt;
+            icUInt32Number flt, fltp, fltsgn, fltexp, fltmnt;
             int exp;
 
-            fltp = (icUInt32Number*)&num;
-            flt = *fltp;
-            if (!(flt & 0x7FFFFFFF))
+            fltp = (icUInt32Number)num;
+            flt = fltp;
+            if ((flt & 0x7FFFFFFF) == 0)
             {
                 rv = (icUInt16Number)(flt >> 16);
             }
@@ -587,13 +588,13 @@ namespace iccmax_dotnet.IccProfLib
                 fltsgn = flt & 0x80000000;
                 fltexp = flt & 0x7F800000;
                 fltmnt = flt & 0x007FFFFF;
-                if (!fltexp)
+                if (fltexp == 0)
                 {
                     rv = (icUInt16Number)(fltsgn >> 16);
                 }
                 else if (fltexp == 0x7F800000)
                 {
-                    if (!fltmnt)
+                    if (fltmnt == 0)
                     {
                         rv = (icUInt16Number)((fltsgn >> 16) | 0x7C00); // Signed Inf
                     }
@@ -620,49 +621,168 @@ namespace iccmax_dotnet.IccProfLib
                         {
                             fltmnt |= 0x00800000;  // Include hidden leading bit
                             rvmnt = (icUInt16Number)(fltmnt >> (14 - exp));
-                            if ((fltmnt >> (13 - exp)) & 0x00000001) // Rounding?
+                            if (((fltmnt >> (13 - exp)) & 0x00000001) != 0) // Rounding?
                                 rvmnt += (icUInt16Number)1;
                         }
-                        rv = (rvsgn | rvmnt);
+                        rv = ((ushort)(rvsgn | rvmnt));
                     }
                     else
                     {
                         rvexp = (icUInt16Number)(exp << 10);
                         rvmnt = (icUInt16Number)(fltmnt >> 13);
-                        if (fltmnt & 0x00001000) // Rounding?
-                            rv = (rvsgn | rvexp | rvmnt) + (icUInt16Number)1;
+                        if ((fltmnt & 0x00001000) != 0) // Rounding?
+                            rv = (ushort)((rvsgn | rvexp | rvmnt) + (icUInt16Number)1);
                         else
-                            rv = (rvsgn | rvexp | rvmnt);
+                            rv = ((ushort)(rvsgn | rvexp | rvmnt));
                     }
                 }
             }
-            return rv;
+            return (icFloat16Number)rv;
         }
 
 
         /*0 to 255 <-> 0.0 to 1.0*/
-        ICCPROFLIB_API icUInt8Number icFtoU8(icFloatNumber num);
-        ICCPROFLIB_API icFloatNumber icU8toF(icUInt8Number num);
+        public static icUInt8Number icFtoU8(icFloatNumber num)
+        {
+            icUInt8Number rv;
+
+            if (num < 0)
+                num = 0;
+            else if (num > 1.0)
+                num = 1.0f;
+
+            rv = (icUInt8Number)icRoundOffset(num * 255.0);
+
+            return rv;
+        }
+        public static icFloatNumber icU8toF(icUInt8Number num)
+        {
+            icFloatNumber rv = (icFloatNumber)((icFloatNumber)num / 255.0);
+
+            return rv;
+        }
 
         /*0 to 65535 <-> 0.0 to 1.0*/
-        ICCPROFLIB_API icUInt16Number icFtoU16(icFloatNumber num);
-        ICCPROFLIB_API icFloatNumber icU16toF(icUInt16Number num);
+        public static icUInt16Number icFtoU16(icFloatNumber num)
+        {
+            icUInt16Number rv;
+
+            if (num < 0)
+                num = 0;
+            else if (num > 1.0)
+                num = 1.0f;
+
+            rv = (icUInt16Number)icRoundOffset(num * 65535.0);
+
+            return rv;
+        }
+        public static icFloatNumber icU16toF(icUInt16Number num)
+        {
+            icFloatNumber rv = (icFloatNumber)((icFloatNumber)num / 65535.0);
+
+            return rv;
+        }
 
         /*0 to 255 <-> -128.0 to 127.0*/
-        ICCPROFLIB_API icUInt8Number icABtoU8(icFloatNumber num);
-        ICCPROFLIB_API icFloatNumber icU8toAB(icUInt8Number num);
+        public static icUInt8Number icABtoU8(icFloatNumber num)
+        {
+            icFloatNumber v = num + 128.0f;
+            if (v < 0)
+                v = 0;
+            else if (v > 255)
+                v = 255;
 
-        ICCPROFLIB_API extern icFloatNumber icD50XYZ[3];
-ICCPROFLIB_API extern icFloatNumber icD50XYZxx[3];
+            return (icUInt8Number)(v + 0.5);
+        }
+        public static icFloatNumber icU8toAB(icUInt8Number num)
+        {
+            return (icFloatNumber)num - 128.0f;
+        }
 
-ICCPROFLIB_API void icNormXYZ(icFloatNumber* XYZ, icFloatNumber* WhiteXYZ = NULL);
-        ICCPROFLIB_API void icDeNormXYZ(icFloatNumber* XYZ, icFloatNumber* WhiteXYZ = NULL);
+        //TODO(PORT) is ref or out here?
+        public static void icNormXYZ(ref icFloatNumber[] XYZ, icFloatNumber[] WhiteXYZ = null)
+        {
+            if (WhiteXYZ == null)
+                WhiteXYZ = Global.icD50XYZ;
 
-        ICCPROFLIB_API icFloatNumber icCubeth(icFloatNumber v);
-        ICCPROFLIB_API icFloatNumber icICubeth(icFloatNumber v);
+            XYZ[0] = XYZ[0] / WhiteXYZ[0];
+            XYZ[1] = XYZ[1] / WhiteXYZ[1];
+            XYZ[2] = XYZ[2] / WhiteXYZ[2];
 
-        ICCPROFLIB_API void icXYZtoLab(icFloatNumber* Lab, const icFloatNumber* XYZ = NULL, const icFloatNumber* WhiteXYZ = NULL);
-        ICCPROFLIB_API void icLabtoXYZ(icFloatNumber* XYZ, const icFloatNumber* Lab = NULL, const icFloatNumber* WhiteXYZ = NULL);
+        }
+        //TODO(PORT) is ref or out here?
+        public static void icDeNormXYZ(ref icFloatNumber[] XYZ, icFloatNumber[] WhiteXYZ = null)
+        {
+            if (WhiteXYZ == null)
+                WhiteXYZ = Global.icD50XYZ;
+
+            XYZ[0] = XYZ[0] * WhiteXYZ[0];
+            XYZ[1] = XYZ[1] * WhiteXYZ[1];
+            XYZ[2] = XYZ[2] * WhiteXYZ[2];
+        }
+
+
+        public static icFloatNumber icCubeth(icFloatNumber v)
+        {
+            if (v > 0.008856)
+            {
+                return (icFloatNumber)Global.ICC_CBRTF(v);
+            }
+            else
+            {
+                return (icFloatNumber)(7.787037037037037037037037037037 * v + 16.0 / 116.0);
+            }
+        }
+        public static icFloatNumber icICubeth(icFloatNumber v)
+        {
+
+            if (v > 0.20689303448275862068965517241379)
+                return v * v * v;
+            else
+#if !SAMPLEICC_NOCLIPLABTOXYZ
+            if (v > 16.0 / 116.0)
+#endif
+                return (icFloatNumber)((v - 16.0 / 116.0) / 7.787037037037037037037037037037);
+#if !SAMPLEICC_NOCLIPLABTOXYZ
+            else
+                return 0.0f;
+#endif
+        }
+
+        public static void icXYZtoLab(ref icFloatNumber[] Lab, icFloatNumber[] XYZ = null, icFloatNumber[] WhiteXYZ = null)
+        {
+            icFloatNumber Xn, Yn, Zn;
+
+            if (XYZ == null)
+                XYZ = Lab;
+
+            if (WhiteXYZ == null)
+                WhiteXYZ = Global.icD50XYZ;
+
+            Xn = icCubeth(XYZ[0] / WhiteXYZ[0]);
+            Yn = icCubeth(XYZ[1] / WhiteXYZ[1]);
+            Zn = icCubeth(XYZ[2] / WhiteXYZ[2]);
+
+            Lab[0] = (icFloatNumber)(116.0 * Yn - 16.0);
+            Lab[1] = (icFloatNumber)(500.0 * (Xn - Yn));
+            Lab[2] = (icFloatNumber)(200.0 * (Yn - Zn));
+        }
+
+        public static void icLabtoXYZ(ref icFloatNumber[] XYZ, icFloatNumber[] Lab = null, icFloatNumber[] WhiteXYZ = null)
+            {
+            if (Lab == null)
+                Lab = XYZ;
+
+            if (WhiteXYZ == null)
+                WhiteXYZ = Global.icD50XYZ;
+
+            icFloatNumber fy = (icFloatNumber)((Lab[0] + 16.0) / 116.0);
+
+            XYZ[0] = icICubeth((icFloatNumber)(Lab[1] / 500.0 + fy)) * WhiteXYZ[0];
+            XYZ[1] = icICubeth(fy) * WhiteXYZ[1];
+            XYZ[2] = icICubeth((icFloatNumber)(fy - Lab[2] / 200.0)) * WhiteXYZ[2];
+        }
+#if PORT
 
         ICCPROFLIB_API void icLab2Lch(icFloatNumber* Lch, icFloatNumber* Lab = NULL);
         ICCPROFLIB_API void icLch2Lab(icFloatNumber* Lab, icFloatNumber* Lch = NULL);

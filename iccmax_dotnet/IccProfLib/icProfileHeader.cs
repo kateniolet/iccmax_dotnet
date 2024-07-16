@@ -2094,6 +2094,8 @@ namespace RefIccMax.IccProfLib
         public const string icMsgValidateNonCompliant = "NonCompliant! - ";
         public const string icMsgValidateCriticalError = "Error! - ";
         public const string icMsgValidateInformation = "Information - ";
+        public static readonly icFloatNumber[] icD50XYZ = { 0.9642f, 1.0000f, 0.8249f };
+        public static readonly icFloatNumber[] icD50XYZxx = { 96.42f, 100.00f, 82.49f };
 
 
         //TODO can these be moved to their respective enums?
